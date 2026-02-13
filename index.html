@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AIBABA Mini App</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2, h3 { margin: 10px 0; }
+        p { margin-bottom: 15px; }
+
+        .gallery { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 10px; 
+            margin-bottom: 30px; 
+        }
+
+        .gallery img { 
+            width: 120px; 
+            height: 120px;      /* фиксированная высота */
+            object-fit: cover;   /* подгоняет картинку в квадрат, центрируется */
+            cursor: pointer; 
+            border: 2px solid #ccc; 
+            border-radius: 5px; 
+        }
+
+        .gallery img:hover { 
+            border-color: #007bff; 
+        }
+    </style>
+</head>
+<body>
+
+<p>У тебя на фото один/два человека. В галерее будут одиночные фотосессии или фотосессии для двоих.</p>
+
+<!-- СТИЛЬ 1 -->
+<h3>Love is</h3>
+<div class="gallery">
+    <img src="example1.png" alt="Кадр 1" onclick="sendStyle('prompt_love_1')">
+    <img src="example2.png" alt="Кадр 2" onclick="sendStyle('prompt_love_2')">
+    <img src="example3.png" alt="Кадр 3" onclick="sendStyle('prompt_love_3')">
+    <img src="example4.png" alt="Кадр 4" onclick="sendStyle('prompt_love_4')">
+    <img src="example5.png" alt="Кадр 5" onclick="sendStyle('prompt_love_5')">
+</div>
+
+<!-- СТИЛЬ 2 -->
+<h3>Romantic Evening</h3>
+<div class="gallery">
+    <img src="example6.png" alt="Кадр 1" onclick="sendStyle('prompt_rom_1')">
+    <img src="example7.png" alt="Кадр 2" onclick="sendStyle('prompt_rom_2')">
+    <img src="example8.png" alt="Кадр 3" onclick="sendStyle('prompt_rom_3')">
+</div>
+
+<!-- СТИЛЬ 3 -->
+<h3>Street Style</h3>
+<div class="gallery">
+    <img src="example9.png" alt="Кадр 1" onclick="sendStyle('prompt_street_1')">
+    <img src="example10.png" alt="Кадр 2" onclick="sendStyle('prompt_street_2')">
+</div>
+
+<script>
+function sendStyle(promptId) {
+    Telegram.WebApp.sendData(promptId); // Отправка выбранного промта боту
+    Telegram.WebApp.close();             // Закрываем мини-апп после выбора
+}
+</script>
+
+</body>
+</html>
