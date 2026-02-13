@@ -7,8 +7,8 @@
 body{font-family:Arial;padding:20px;background:#f5f5f5;}
 h3{margin:10px 0;}
 .gallery{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;}
-.gallery img{width:120px;height:120px;object-fit:cover;cursor:pointer;border:2px solid #ccc;border-radius:5px;transition:0.2s;}
-.gallery img:hover{transform:scale(1.05);border-color:#007bff;}
+.gallery div{width:120px;height:120px;background:#ccc;cursor:pointer;border:2px solid #999;border-radius:5px;display:flex;align-items:center;justify-content:center;transition:0.2s;font-weight:bold;color:#555;}
+.gallery div:hover{transform:scale(1.05);border-color:#007bff;}
 .selected{border-color:#28a745!important;transform:scale(1.05);}
 </style>
 </head>
@@ -18,33 +18,36 @@ h3{margin:10px 0;}
 
 <h3>Love is</h3>
 <div class="gallery">
-<img src="example1.png" alt="Кадр1" onclick="sendStyle(this,'prompt_love_1')">
-<img src="example2.png" alt="Кадр2" onclick="sendStyle(this,'prompt_love_2')">
-<img src="example3.png" alt="Кадр3" onclick="sendStyle(this,'prompt_love_3')">
+<div onclick="sendStyle(this,'prompt_love_1')">1</div>
+<div onclick="sendStyle(this,'prompt_love_2')">2</div>
+<div onclick="sendStyle(this,'prompt_love_3')">3</div>
 </div>
 
 <h3>Romantic Evening</h3>
 <div class="gallery">
-<img src="example4.png" alt="Кадр1" onclick="sendStyle(this,'prompt_rom_1')">
-<img src="example5.png" alt="Кадр2" onclick="sendStyle(this,'prompt_rom_2')">
+<div onclick="sendStyle(this,'prompt_rom_1')">1</div>
+<div onclick="sendStyle(this,'prompt_rom_2')">2</div>
 </div>
 
 <h3>Street Style</h3>
 <div class="gallery">
-<img src="example6.png" alt="Кадр1" onclick="sendStyle(this,'prompt_street_1')">
-<img src="example7.png" alt="Кадр2" onclick="sendStyle(this,'prompt_street_2')">
+<div onclick="sendStyle(this,'prompt_street_1')">1</div>
+<div onclick="sendStyle(this,'prompt_street_2')">2</div>
 </div>
 
 <script>
-function sendStyle(img,styleId){
-const all=document.querySelectorAll('.gallery img');
-all.forEach(i=>i.classList.remove('selected'));
-img.classList.add('selected');
-if(window.Telegram && Telegram.WebApp){
-Telegram.WebApp.sendData(JSON.stringify({style:styleId}));
-setTimeout(()=>Telegram.WebApp.close(),200);
-}else{alert("Web App не обнаружен!");}
+function sendStyle(el,styleId){
+    const all=document.querySelectorAll('.gallery div');
+    all.forEach(i=>i.classList.remove('selected'));
+    el.classList.add('selected');
+    if(window.Telegram && Telegram.WebApp){
+        Telegram.WebApp.sendData(JSON.stringify({style:styleId}));
+        setTimeout(()=>Telegram.WebApp.close(),200);
+    } else {
+        alert("Web App не обнаружен!");
+    }
 }
 </script>
+
 </body>
 </html>
