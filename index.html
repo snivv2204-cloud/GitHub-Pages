@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>AIBABA Mini App</title>
 <style>
-body { font-family: Arial; padding:20px; background:#f5f5f5;}
+body{font-family:Arial;padding:20px;background:#f5f5f5;}
 h3{margin:10px 0;}
 .gallery{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;}
 .gallery img{width:120px;height:120px;object-fit:cover;cursor:pointer;border:2px solid #ccc;border-radius:5px;transition:0.2s;}
@@ -36,18 +36,15 @@ h3{margin:10px 0;}
 </div>
 
 <script>
-function sendStyle(img, styleId){
-const allImgs=document.querySelectorAll('.gallery img');
-allImgs.forEach(i=>i.classList.remove('selected'));
+function sendStyle(img,styleId){
+const all=document.querySelectorAll('.gallery img');
+all.forEach(i=>i.classList.remove('selected'));
 img.classList.add('selected');
-
 if(window.Telegram && Telegram.WebApp){
 Telegram.WebApp.sendData(JSON.stringify({style:styleId}));
 setTimeout(()=>Telegram.WebApp.close(),200);
-}else{
-alert("Web App не обнаружен!");
-}}
+}else{alert("Web App не обнаружен!");}
+}
 </script>
-
 </body>
 </html>
