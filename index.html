@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>AIBABA Mini App</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
         h2, h3 { margin: 10px 0; }
         p { margin-bottom: 15px; }
 
@@ -22,10 +22,32 @@
             cursor: pointer; 
             border: 2px solid #ccc; 
             border-radius: 5px; 
+            position: relative;
+            transition: transform 0.2s, border-color 0.2s;
         }
 
         .gallery img:hover { 
             border-color: #007bff; 
+            transform: scale(1.05);
+        }
+
+        .spinner {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 3px solid rgba(0,0,0,0.1);
+            border-top: 3px solid #007bff;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
 </head>
@@ -36,32 +58,44 @@
 <!-- СТИЛЬ 1 -->
 <h3>Love is</h3>
 <div class="gallery">
-    <img src="example1.png" alt="Кадр 1" onclick="sendStyle('prompt_love_1')">
-    <img src="example2.png" alt="Кадр 2" onclick="sendStyle('prompt_love_2')">
-    <img src="example3.png" alt="Кадр 3" onclick="sendStyle('prompt_love_3')">
-    <img src="example4.png" alt="Кадр 4" onclick="sendStyle('prompt_love_4')">
-    <img src="example5.png" alt="Кадр 5" onclick="sendStyle('prompt_love_5')">
+    <img src="example1.png" alt="Кадр 1" onclick="sendStyle(this, 'prompt_love_1')">
+    <img src="example2.png" alt="Кадр 2" onclick="sendStyle(this, 'prompt_love_2')">
+    <img src="example3.png" alt="Кадр 3" onclick="sendStyle(this, 'prompt_love_3')">
+    <img src="example4.png" alt="Кадр 4" onclick="sendStyle(this, 'prompt_love_4')">
+    <img src="example5.png" alt="Кадр 5" onclick="sendStyle(this, 'prompt_love_5')">
 </div>
 
 <!-- СТИЛЬ 2 -->
 <h3>Romantic Evening</h3>
 <div class="gallery">
-    <img src="example6.png" alt="Кадр 1" onclick="sendStyle('prompt_rom_1')">
-    <img src="example7.png" alt="Кадр 2" onclick="sendStyle('prompt_rom_2')">
-    <img src="example8.png" alt="Кадр 3" onclick="sendStyle('prompt_rom_3')">
+    <img src="example6.png" alt="Кадр 1" onclick="sendStyle(this, 'prompt_rom_1')">
+    <img src="example7.png" alt="Кадр 2" onclick="sendStyle(this, 'prompt_rom_2')">
+    <img src="example8.png" alt="Кадр 3" onclick="sendStyle(this, 'prompt_rom_3')">
 </div>
 
 <!-- СТИЛЬ 3 -->
 <h3>Street Style</h3>
 <div class="gallery">
-    <img src="example9.png" alt="Кадр 1" onclick="sendStyle('prompt_street_1')">
-    <img src="example10.png" alt="Кадр 2" onclick="sendStyle('prompt_street_2')">
+    <img src="example9.png" alt="Кадр 1" onclick="sendStyle(this, 'prompt_street_1')">
+    <img src="example10.png" alt="Кадр 2" onclick="sendStyle(this, 'prompt_street_2')">
 </div>
 
 <script>
-function sendStyle(promptId) {
-    Telegram.WebApp.sendData(promptId); // Отправка выбранного промта боту
-    Telegram.WebApp.close();             // Закрываем мини-апп после выбора
+function sendStyle(imgElement, styleId) {
+    const spinner = document.createElement("div");
+    spinner.className = "spinner";
+    imgElement.parentElement.appendChild(spinner);
+    spinner.style.display = "block";
+
+    if (window.Telegram.WebApp) {
+        Telegram.WebApp.sendData(JSON.stringify({ style: styleId }));
+        setTimeout(() => {
+            Telegram.WebApp.close();
+        }, 500); // небольшая задержка, чтобы спиннер был виден
+    } else {
+        alert("Web App не обнаружен!");
+        spinner.style.display = "none";
+    }
 }
 </script>
 
