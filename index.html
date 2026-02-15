@@ -4,48 +4,77 @@
 <meta charset="UTF-8">
 <title>AIBABA</title>
 
-<!-- ОБЯЗАТЕЛЬНО -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{font-family:Arial;padding:20px;background:#f2f2f2;}
-.gallery{display:flex;flex-wrap:wrap;gap:12px;}
-.item{
-  width:120px;height:120px;
-  background:#ccc;
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  font-weight:bold;
-  border:2px solid #999;
-  transition:.2s;
+body{
+    font-family:Arial;
+    padding:20px;
+    background:#f2f2f2;
 }
-.item:hover{transform:scale(1.05);border-color:#0088cc;}
-.selected{border-color:#28a745!important;}
+
+.gallery{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.item{
+    width:120px;
+    height:120px;
+    background:#ccc;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    font-weight:bold;
+    border:2px solid #999;
+    transition:.2s;
+}
+
+.item:hover{
+    transform:scale(1.05);
+    border-color:#0088cc;
+}
+
+.selected{
+    border-color:#28a745!important;
+}
 </style>
 </head>
+
 <body>
 
 <h3>Выбери стиль</h3>
 
 <div class="gallery">
-  <div class="item" onclick="sendStyle(this,'love_1')">Love 1</div>
-  <div class="item" onclick="sendStyle(this,'love_2')">Love 2</div>
-  <div class="item" onclick="sendStyle(this,'street_1')">Street 1</div>
-  <div class="item" onclick="sendStyle(this,'street_2')">Street 2</div>
+  <div class="item" onclick="sendStyle(this,'love')">Love</div>
+  <div class="item" onclick="sendStyle(this,'romantic')">Romantic</div>
+  <div class="item" onclick="sendStyle(this,'street')">Street</div>
+  <div class="item" onclick="sendStyle(this,'luxury')">Luxury</div>
 </div>
 
 <script>
+
+Telegram.WebApp.ready();
+
 function sendStyle(el,style){
-    document.querySelectorAll('.item').forEach(i=>i.classList.remove('selected'));
+
+    document.querySelectorAll('.item')
+        .forEach(i=>i.classList.remove('selected'));
+
     el.classList.add('selected');
 
-    Telegram.WebApp.ready();
-    Telegram.WebApp.sendData(JSON.stringify({style:style}));
-    setTimeout(()=>Telegram.WebApp.close(),200);
+    Telegram.WebApp.sendData(
+        JSON.stringify({style:style})
+    );
+
+    setTimeout(()=>{
+        Telegram.WebApp.close();
+    },200);
 }
+
 </script>
 
 </body>
