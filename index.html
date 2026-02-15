@@ -1,80 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>AIBABA</title>
-
+<meta charset="UTF-8" />
+<title>AI Фотосессия</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-body{
-    font-family:Arial;
-    padding:20px;
-    background:#f2f2f2;
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #111;
+  color: white;
+  text-align: center;
 }
 
-.gallery{
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
+h2 {
+  margin-top: 20px;
 }
 
-.item{
-    width:120px;
-    height:120px;
-    background:#ccc;
-    border-radius:8px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    font-weight:bold;
-    border:2px solid #999;
-    transition:.2s;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 15px;
 }
 
-.item:hover{
-    transform:scale(1.05);
-    border-color:#0088cc;
+.card {
+  background: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-.selected{
-    border-color:#28a745!important;
+.card:hover {
+  transform: scale(1.03);
+}
+
+.card img {
+  width: 100%;
+  display: block;
+}
+
+.card p {
+  margin: 5px;
+  font-size: 14px;
+}
+
+button {
+  margin: 20px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #2ea6ff;
+  color: white;
+  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
-<h3>Выбери стиль</h3>
+<h2>Выберите стиль</h2>
 
-<div class="gallery">
-  <div class="item" onclick="sendStyle(this,'love')">Love</div>
-  <div class="item" onclick="sendStyle(this,'romantic')">Romantic</div>
-  <div class="item" onclick="sendStyle(this,'street')">Street</div>
-  <div class="item" onclick="sendStyle(this,'luxury')">Luxury</div>
+<div class="grid">
+
+<div class="card" onclick="selectStyle('Business')">
+<img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d">
+<p>Business</p>
 </div>
 
+<div class="card" onclick="selectStyle('Street Style')">
+<img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce">
+<p>Street</p>
+</div>
+
+<div class="card" onclick="selectStyle('Cyberpunk')">
+<img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee">
+<p>Cyberpunk</p>
+</div>
+
+<div class="card" onclick="selectStyle('Luxury')">
+<img src="https://images.unsplash.com/photo-1519741497674-611481863552">
+<p>Luxury</p>
+</div>
+
+</div>
+
+<button onclick="sendData()">Создать</button>
+
 <script>
+let selectedStyle = null;
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-Telegram.WebApp.ready();
-
-function sendStyle(el,style){
-
-    document.querySelectorAll('.item')
-        .forEach(i=>i.classList.remove('selected'));
-
-    el.classList.add('selected');
-
-    Telegram.WebApp.sendData(
-        JSON.stringify({style:style})
-    );
-
-    setTimeout(()=>{
-        Telegram.WebApp.close();
-    },200);
+function selectStyle(style) {
+  selectedStyle = style;
+  alert("Выбран стиль: " + style);
 }
 
+function sendData() {
+  if (!selectedStyle) {
+    alert("Выберите стиль");
+    return;
+  }
+
+  tg.sendData(JSON.stringify({
+    style: selectedStyle
+  }));
+}
 </script>
 
 </body>
