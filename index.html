@@ -2,50 +2,49 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>AIBABA Mini App</title>
+<title>AIBABA</title>
+
+<!-- ОБЯЗАТЕЛЬНО -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
-body{font-family:Arial;padding:20px;background:#f5f5f5;}
-h3{margin:10px 0;}
-.gallery{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px;}
-.gallery div{width:120px;height:120px;background:#ccc;cursor:pointer;border:2px solid #999;border-radius:5px;display:flex;align-items:center;justify-content:center;transition:0.2s;font-weight:bold;color:#555;}
-.gallery div:hover{transform:scale(1.05);border-color:#007bff;}
-.selected{border-color:#28a745!important;transform:scale(1.05);}
+body{font-family:Arial;padding:20px;background:#f2f2f2;}
+.gallery{display:flex;flex-wrap:wrap;gap:12px;}
+.item{
+  width:120px;height:120px;
+  background:#ccc;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-weight:bold;
+  border:2px solid #999;
+  transition:.2s;
+}
+.item:hover{transform:scale(1.05);border-color:#0088cc;}
+.selected{border-color:#28a745!important;}
 </style>
 </head>
 <body>
 
-<p>Выберите стиль. После клика мини-апп закроется, генерация начнётся.</p>
+<h3>Выбери стиль</h3>
 
-<h3>Love is</h3>
 <div class="gallery">
-<div onclick="sendStyle(this,'prompt_love_1')">1</div>
-<div onclick="sendStyle(this,'prompt_love_2')">2</div>
-<div onclick="sendStyle(this,'prompt_love_3')">3</div>
-</div>
-
-<h3>Romantic Evening</h3>
-<div class="gallery">
-<div onclick="sendStyle(this,'prompt_rom_1')">1</div>
-<div onclick="sendStyle(this,'prompt_rom_2')">2</div>
-</div>
-
-<h3>Street Style</h3>
-<div class="gallery">
-<div onclick="sendStyle(this,'prompt_street_1')">1</div>
-<div onclick="sendStyle(this,'prompt_street_2')">2</div>
+  <div class="item" onclick="sendStyle(this,'love_1')">Love 1</div>
+  <div class="item" onclick="sendStyle(this,'love_2')">Love 2</div>
+  <div class="item" onclick="sendStyle(this,'street_1')">Street 1</div>
+  <div class="item" onclick="sendStyle(this,'street_2')">Street 2</div>
 </div>
 
 <script>
-function sendStyle(el,styleId){
-    const all=document.querySelectorAll('.gallery div');
-    all.forEach(i=>i.classList.remove('selected'));
+function sendStyle(el,style){
+    document.querySelectorAll('.item').forEach(i=>i.classList.remove('selected'));
     el.classList.add('selected');
-    if(window.Telegram && Telegram.WebApp){
-        Telegram.WebApp.sendData(JSON.stringify({style:styleId}));
-        setTimeout(()=>Telegram.WebApp.close(),200);
-    } else {
-        alert("Web App не обнаружен!");
-    }
+
+    Telegram.WebApp.ready();
+    Telegram.WebApp.sendData(JSON.stringify({style:style}));
+    setTimeout(()=>Telegram.WebApp.close(),200);
 }
 </script>
 
