@@ -46,17 +46,6 @@ h2 {
   margin: 5px;
   font-size: 14px;
 }
-
-button {
-  margin: 20px;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  background: #2ea6ff;
-  color: white;
-  cursor: pointer;
-}
 </style>
 </head>
 
@@ -88,27 +77,13 @@ button {
 
 </div>
 
-<button onclick="sendData()">Создать</button>
-
 <script>
-let selectedStyle = null;
 const tg = window.Telegram.WebApp;
 tg.expand();
 
 function selectStyle(style) {
-  selectedStyle = style;
-  alert("Выбран стиль: " + style);
-}
-
-function sendData() {
-  if (!selectedStyle) {
-    alert("Выберите стиль");
-    return;
-  }
-
-  tg.sendData(JSON.stringify({
-    style: selectedStyle
-  }));
+  // сразу отправляем данные боту
+  tg.sendData(JSON.stringify({ style: style }));
 }
 </script>
 
