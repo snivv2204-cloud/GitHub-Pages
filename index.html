@@ -23,7 +23,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .logo-icon img{width:100%;height:100%;object-fit:cover}
 .logo-text{font-size:20px;font-weight:800;letter-spacing:1px;background:linear-gradient(135deg,#4fc3f7,#a78bfa,#e0aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .balance-pill{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--blue)}
-.balance-pill::before{content:'⬡';font-size:10px}
+.balance-pill::before{content:'\2B22';font-size:10px}
 
 .main{position:relative;z-index:1;padding:16px 0 100px}
 .section{margin-bottom:24px}
@@ -32,23 +32,36 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .cards-row{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .cards-row::-webkit-scrollbar{display:none}
 
-.card{flex:0 0 152px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;transition:border-color .2s;animation:fadeUp .4s ease both}
+.card{flex:0 0 152px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;animation:fadeUp .4s ease both}
 
-/* touch-action:pan-y — браузер скроллит вертикально сам, горизонталь — мы перехватываем */
-.card-img{position:relative;width:100%;padding-top:125%;overflow:hidden;background:var(--surface2);cursor:pointer;touch-action:pan-y;user-select:none}
-.card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,var(--surface) 0%,transparent 100%);pointer-events:none;z-index:1}
+.card-img{position:relative;width:100%;padding-top:125%;overflow:hidden;background:var(--surface2)}
+.card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,var(--surface) 0%,transparent 100%);pointer-events:none;z-index:2}
 
-.badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:3}
+.badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:4}
 
 .card-slides{position:absolute;inset:0;display:flex;transition:transform .28s cubic-bezier(.25,.46,.45,.94);will-change:transform}
-.card-slide{flex:0 0 100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}
-
-/* Градиентные заглушки */
+.card-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center}
 .placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-.placeholder-icon{font-size:36px;filter:drop-shadow(0 0 12px rgba(255,255,255,.3))}
-.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase}
+.placeholder-icon{font-size:38px;filter:drop-shadow(0 0 14px rgba(255,255,255,.25))}
+.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:1.5px;text-transform:uppercase}
 
-.card-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;pointer-events:none}
+/* Зоны нажатия — левая и правая половины карточки */
+.card-zone{position:absolute;top:0;bottom:0;width:50%;z-index:3;display:flex;align-items:center;cursor:pointer}
+.card-zone-left{left:0;justify-content:flex-start;padding-left:6px}
+.card-zone-right{right:0;justify-content:flex-end;padding-right:6px}
+
+/* Стрелки — только визуал, не перехватывают клик */
+.card-arrow{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.7);pointer-events:none;opacity:0;transition:opacity .15s}
+.card-zone:active .card-arrow{opacity:1}
+
+/* Показываем стрелки только если есть куда переключать */
+.card-zone-left.visible .card-arrow,
+.card-zone-right.visible .card-arrow{opacity:.55}
+.card-zone-left.visible:active .card-arrow,
+.card-zone-right.visible:active .card-arrow{opacity:1}
+
+/* Точки */
+.card-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:4;pointer-events:none}
 .cdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
 .cdot.on{background:#fff;transform:scale(1.3)}
 
@@ -58,19 +71,28 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .btn-sm:active{transform:scale(0.97)}
 .btn-sm::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);animation:shimmer 2.5s infinite}
 
+/* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s}
 .modal-bg.open{opacity:1;pointer-events:all}
 .modal-sheet{position:relative;flex:1;display:flex;flex-direction:column;transform:translateY(40px);transition:transform .3s cubic-bezier(.34,1.4,.64,1)}
 .modal-bg.open .modal-sheet{transform:translateY(0)}
-.modal-img-wrap{flex:1;position:relative;overflow:hidden;background:var(--bg);display:flex;align-items:center;justify-content:center}
+.modal-img-wrap{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .modal-img-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none;z-index:1}
 .modal-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.modal-placeholder-icon{font-size:72px;filter:drop-shadow(0 0 24px rgba(255,255,255,.25))}
-.modal-placeholder-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase}
+.modal-ph-icon{font-size:80px;filter:drop-shadow(0 0 28px rgba(255,255,255,.2))}
+.modal-ph-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase}
 
 .modal-counter{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:14px;z-index:5}
 .modal-close{position:absolute;top:12px;right:12px;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.2);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:background .18s}
 .modal-close:active{background:rgba(255,255,255,.2)}
+
+/* Зоны в модалке */
+.modal-zone{position:absolute;top:0;bottom:0;width:40%;z-index:3;display:flex;align-items:center;cursor:pointer}
+.modal-zone-left{left:0;justify-content:flex-start;padding-left:12px}
+.modal-zone-right{right:0;justify-content:flex-end;padding-right:12px}
+.modal-arrow{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.8);pointer-events:none;opacity:0;transition:opacity .2s}
+.modal-zone.visible .modal-arrow{opacity:.6}
+.modal-zone.visible:active .modal-arrow{opacity:1}
 
 .modal-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:9px;z-index:5}
 .mdot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s,transform .2s;cursor:pointer}
@@ -107,51 +129,56 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 <div class="main" id="main"></div>
 
 <div class="bottom-nav">
-  <div class="nav-btn active"><div class="nav-ico">✦</div><div class="nav-lbl">Стили</div></div>
-  <div class="nav-btn"><div class="nav-ico">🖼</div><div class="nav-lbl">Мои фото</div></div>
-  <div class="nav-btn"><div class="nav-ico">⬡</div><div class="nav-lbl">Баланс</div></div>
+  <div class="nav-btn active"><div class="nav-ico">&#10022;</div><div class="nav-lbl">Стили</div></div>
+  <div class="nav-btn"><div class="nav-ico">&#128444;</div><div class="nav-lbl">Мои фото</div></div>
+  <div class="nav-btn"><div class="nav-ico">&#11206;</div><div class="nav-lbl">Баланс</div></div>
 </div>
 
 <div class="modal-bg" id="modal">
   <div class="modal-sheet">
     <div class="modal-img-wrap" id="mImgWrap">
-      <div class="modal-placeholder" id="mPlaceholder">
-        <div class="modal-placeholder-icon" id="mIcon"></div>
-        <div class="modal-placeholder-label" id="mGenderLabel"></div>
+      <div class="modal-placeholder">
+        <div class="modal-ph-icon" id="mPhIcon"></div>
+        <div class="modal-ph-label" id="mPhLabel"></div>
+      </div>
+      <!-- Зоны переключения в модалке -->
+      <div class="modal-zone modal-zone-left" id="mZoneLeft" onclick="modalStep(-1)">
+        <div class="modal-arrow">&#8249;</div>
+      </div>
+      <div class="modal-zone modal-zone-right" id="mZoneRight" onclick="modalStep(1)">
+        <div class="modal-arrow">&#8250;</div>
       </div>
       <div class="modal-counter" id="mCounter">1 / 3</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
       <div class="modal-dots" id="mDots"></div>
     </div>
     <div class="modal-foot">
       <div class="modal-style-name" id="mName"></div>
       <div class="modal-gender-label" id="mGender"></div>
       <button class="btn-generate" onclick="doGenerate()">
-        <span>✦ Сгенерировать (1 фото)</span>
+        <span>&#10022; Сгенерировать (1 фото)</span>
       </button>
     </div>
   </div>
 </div>
 
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
-tg.enableClosingConfirmation();
+var tg = window.Telegram ? window.Telegram.WebApp : null;
+if(tg){ tg.expand(); tg.enableClosingConfirmation(); }
 
-const GKEYS   = ["male","female","couple"];
-const GLABELS = ["Мужской","Женский","Пара"];
-const GICONS  = ["👨","👩","👫"];
+var GKEYS   = ["male","female","couple"];
+var GLABELS = ["Мужской","Женский","Пара"];
+var GICONS  = ["\u{1F468}","\u{1F469}","\u{1F46B}"];
 
-// Градиенты и иконки для каждой секции
-const SEC_THEME = {
-  "Бизнес":   {grad:"linear-gradient(160deg,#0f2027,#203a43,#2c5364)", icon:"💼"},
-  "Люкс":     {grad:"linear-gradient(160deg,#1a0533,#3d1c6e,#6a3fa6)", icon:"👑"},
-  "Street":   {grad:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)", icon:"🎨"},
-  "Природа":  {grad:"linear-gradient(160deg,#134e5e,#1a6b3a,#2d8653)", icon:"🌿"},
-  "Праздники":{grad:"linear-gradient(160deg,#2c1654,#8b1a6b,#c0392b)", icon:"🎉"},
+var SEC_THEME = {
+  "\u0411\u0438\u0437\u043D\u0435\u0441":   {grad:"linear-gradient(160deg,#0f2027,#203a43,#2c5364)", icon:"\u{1F4BC}"},
+  "\u041B\u044E\u043A\u0441":     {grad:"linear-gradient(160deg,#1a0533,#3d1c6e,#6a3fa6)", icon:"\u{1F451}"},
+  "Street":   {grad:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)", icon:"\u{1F3A8}"},
+  "\u041F\u0440\u0438\u0440\u043E\u0434\u0430":  {grad:"linear-gradient(160deg,#134e5e,#1a6b3a,#2d8653)", icon:"\u{1F33F}"},
+  "\u041F\u0440\u0430\u0437\u0434\u043D\u0438\u043A\u0438":{grad:"linear-gradient(160deg,#2c1654,#8b1a6b,#c0392b)", icon:"\u{1F389}"}
 };
 
-const STYLES = [
+var STYLES = [
   {id:"biz_office", sec:"Бизнес",    name:"Деловой офис",    badge:true},
   {id:"biz_city",   sec:"Бизнес",    name:"Город & карьера", badge:false},
   {id:"biz_conf",   sec:"Бизнес",    name:"Конференция",     badge:false},
@@ -162,213 +189,168 @@ const STYLES = [
   {id:"nat_forest", sec:"Природа",   name:"Лесная прогулка", badge:false},
   {id:"nat_ocean",  sec:"Природа",   name:"Океан & закат",   badge:false},
   {id:"hol_ny",     sec:"Праздники", name:"Новый год",       badge:true},
-  {id:"hol_bday",   sec:"Праздники", name:"День рождения",   badge:false},
+  {id:"hol_bday",   sec:"Праздники", name:"День рождения",   badge:false}
 ];
 
-const cardG = {};
-STYLES.forEach(s => cardG[s.id] = 0);
-let mStyle = null, mGIdx = 0;
+var cardG = {};
+STYLES.forEach(function(s){ cardG[s.id] = 0; });
+var mStyle = null, mGIdx = 0;
+var MAX_G = 2;
 
-// ── BUILD ──
 function build() {
-  const secs = {};
-  STYLES.forEach(s => { (secs[s.sec] = secs[s.sec]||[]).push(s); });
-  const main = document.getElementById("main");
-  Object.entries(secs).forEach(([title, list]) => {
-    const sec = document.createElement("div");
-    sec.className = "section";
-    const titleEl = document.createElement("div");
-    titleEl.className = "section-title";
-    titleEl.textContent = title;
-    sec.appendChild(titleEl);
-    const row = document.createElement("div");
-    row.className = "cards-row";
-    list.forEach(s => row.appendChild(makeCard(s)));
+  var secs = {};
+  STYLES.forEach(function(s){ if(!secs[s.sec]) secs[s.sec]=[]; secs[s.sec].push(s); });
+  var main = document.getElementById("main");
+  Object.keys(secs).forEach(function(title) {
+    var list = secs[title];
+    var sec = document.createElement("div"); sec.className = "section";
+    var th = document.createElement("div"); th.className = "section-title"; th.textContent = title;
+    sec.appendChild(th);
+    var row = document.createElement("div"); row.className = "cards-row";
+    list.forEach(function(s){ row.appendChild(makeCard(s)); });
     sec.appendChild(row);
     main.appendChild(sec);
   });
 }
 
-function makePlaceholderSlide(theme, gLabel, gIcon, nameStr) {
-  const div = document.createElement("div");
-  div.className = "card-slide";
-  div.style.background = theme.grad;
-  div.innerHTML =
-    '<div class="placeholder">' +
-    '<div class="placeholder-icon">' + theme.icon + '</div>' +
-    '<div class="placeholder-label">' + gLabel + '</div>' +
-    '</div>';
-  return div;
+function getTheme(sec) {
+  return SEC_THEME[sec] || {grad:"linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)", icon:"\u2726"};
 }
 
 function makeCard(s) {
-  const theme = SEC_THEME[s.sec] || {grad:"linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)", icon:"✦"};
-  const d = document.createElement("div");
-  d.className = "card";
+  var theme = getTheme(s.sec);
+  var d = document.createElement("div"); d.className = "card";
 
   // card-img
-  const imgWrap = document.createElement("div");
-  imgWrap.className = "card-img";
-  imgWrap.id = "cimg-" + s.id;
+  var wrap = document.createElement("div");
+  wrap.className = "card-img"; wrap.id = "cimg-"+s.id;
+
   if(s.badge) {
-    const badge = document.createElement("span");
-    badge.className = "badge";
-    badge.textContent = "НОВОЕ";
-    imgWrap.appendChild(badge);
+    var b = document.createElement("span"); b.className = "badge"; b.textContent = "НОВОЕ";
+    wrap.appendChild(b);
   }
 
   // slides
-  const slides = document.createElement("div");
-  slides.className = "card-slides";
-  slides.id = "cs-" + s.id;
+  var slides = document.createElement("div");
+  slides.className = "card-slides"; slides.id = "cs-"+s.id;
   GLABELS.forEach(function(gl, i) {
-    slides.appendChild(makePlaceholderSlide(theme, gl, GICONS[i], s.name));
+    var slide = document.createElement("div"); slide.className = "card-slide";
+    slide.style.background = theme.grad;
+    var ph = document.createElement("div"); ph.className = "placeholder";
+    ph.innerHTML = '<div class="placeholder-icon">'+theme.icon+'</div><div class="placeholder-label">'+gl+'</div>';
+    slide.appendChild(ph);
+    slides.appendChild(slide);
   });
-  imgWrap.appendChild(slides);
+  wrap.appendChild(slides);
 
   // dots
-  const dotsEl = document.createElement("div");
-  dotsEl.className = "card-dots";
-  dotsEl.id = "cd-" + s.id;
+  var dotsEl = document.createElement("div"); dotsEl.className = "card-dots"; dotsEl.id = "cd-"+s.id;
   GLABELS.forEach(function(_, i) {
-    const dot = document.createElement("div");
-    dot.className = "cdot" + (i===0?" on":"");
+    var dot = document.createElement("div"); dot.className = "cdot"+(i===0?" on":"");
     dotsEl.appendChild(dot);
   });
-  imgWrap.appendChild(dotsEl);
-  d.appendChild(imgWrap);
+  wrap.appendChild(dotsEl);
 
-  // bottom
-  const bottom = document.createElement("div");
-  bottom.className = "card-bottom";
-  const nameEl = document.createElement("div");
-  nameEl.className = "card-name";
-  nameEl.textContent = s.name;
-  const btn = document.createElement("button");
-  btn.className = "btn-sm";
-  btn.innerHTML = "✦ Создать";
-  btn.addEventListener("click", function(e) { e.stopPropagation(); quickGen(s.id); });
-  bottom.appendChild(nameEl);
-  bottom.appendChild(btn);
-  d.appendChild(bottom);
+  // Зона ЛЕВАЯ (назад) — нажатие в левой половине
+  var zL = document.createElement("div");
+  zL.className = "card-zone card-zone-left";
+  zL.id = "czl-"+s.id;
+  zL.innerHTML = '<div class="card-arrow">&#8249;</div>';
+  zL.addEventListener("click", function(e){ e.stopPropagation(); cardStep(s.id, -1); });
+  wrap.appendChild(zL);
 
-  // ВАРИАНТ 1: Pointer Events + touch-action:pan-y
-  attachSwipeV1(imgWrap, s);
+  // Зона ПРАВАЯ (вперёд) — нажатие в правой половине
+  var zR = document.createElement("div");
+  zR.className = "card-zone card-zone-right visible"; // сначала видна только правая
+  zR.id = "czr-"+s.id;
+  zR.innerHTML = '<div class="card-arrow">&#8250;</div>';
+  zR.addEventListener("click", function(e){ e.stopPropagation(); cardStep(s.id, 1); });
+  wrap.appendChild(zR);
+
+  d.appendChild(wrap);
+
+  // card-bottom
+  var bot = document.createElement("div"); bot.className = "card-bottom";
+  var nameEl = document.createElement("div"); nameEl.className = "card-name"; nameEl.textContent = s.name;
+  var btn = document.createElement("button"); btn.className = "btn-sm"; btn.innerHTML = "&#10022; Создать";
+  btn.addEventListener("click", function(e){ e.stopPropagation(); quickGen(s.id); });
+  bot.appendChild(nameEl); bot.appendChild(btn);
+  d.appendChild(bot);
+
+  // Центр карточки — открывает модалку
+  wrap.addEventListener("click", function(e){
+    // Если клик не попал в зоны — открываем модалку
+    openModal(s.id);
+  });
+
   return d;
 }
 
-// ── ВАРИАНТ 1: Pointer Events ──
-// touch-action:pan-y на .card-img — браузер сам скроллит вертикально,
-// мы перехватываем только горизонталь через pointermove + preventDefault
-function attachSwipeV1(el, s) {
-  var startX=0, startY=0, tracking=false, isHoriz=null, didMove=false;
-
-  el.addEventListener("pointerdown", function(e) {
-    startX = e.clientX;
-    startY = e.clientY;
-    tracking = true;
-    isHoriz = null;
-    didMove = false;
-    el.setPointerCapture(e.pointerId);
-  }, {passive:true});
-
-  el.addEventListener("pointermove", function(e) {
-    if(!tracking) return;
-    var dx = e.clientX - startX;
-    var dy = e.clientY - startY;
-    if(isHoriz === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
-      isHoriz = Math.abs(dx) > Math.abs(dy);
-    }
-    if(isHoriz === true) {
-      e.preventDefault(); // блокируем горизонтальный скролл галереи
-      didMove = true;
-    }
-  }, {passive:false}); // passive:false — только так работает preventDefault
-
-  el.addEventListener("pointerup", function(e) {
-    if(!tracking) return;
-    tracking = false;
-    var dx = e.clientX - startX;
-    var dy = Math.abs(e.clientY - startY);
-    if(isHoriz === true && Math.abs(dx) > 28 && dy < 80) {
-      // свайп — переключить слайд
-      var cur = cardG[s.id];
-      var next = dx < 0 ? Math.min(cur+1, 2) : Math.max(cur-1, 0);
-      if(next !== cur) setCardSlide(s.id, next);
-    } else if(!didMove) {
-      // тап — открыть модалку
-      openModal(s.id);
-    }
-  }, {passive:true});
-
-  el.addEventListener("pointercancel", function() { tracking = false; });
+function cardStep(id, dir) {
+  var cur = cardG[id];
+  var next = cur + dir;
+  if(next < 0 || next > MAX_G) return;
+  setCardSlide(id, next);
 }
 
 function setCardSlide(id, idx) {
   cardG[id] = idx;
   var sl = document.getElementById("cs-"+id);
   var dt = document.getElementById("cd-"+id);
-  if(sl) sl.style.transform = "translateX(-" + (idx*100) + "%)";
-  if(dt) {
-    var dots = dt.querySelectorAll(".cdot");
-    dots.forEach(function(d,i){ d.classList.toggle("on", i===idx); });
-  }
+  var zL = document.getElementById("czl-"+id);
+  var zR = document.getElementById("czr-"+id);
+  if(sl) sl.style.transform = "translateX(-"+(idx*100)+"%)";
+  if(dt) dt.querySelectorAll(".cdot").forEach(function(d,i){ d.classList.toggle("on", i===idx); });
+  // показываем/скрываем стрелки в зависимости от позиции
+  if(zL) zL.classList.toggle("visible", idx > 0);
+  if(zR) zR.classList.toggle("visible", idx < MAX_G);
 }
 
 function quickGen(id) {
   var s = STYLES.find(function(x){return x.id===id;});
-  send(s, cardG[id]);
+  doSend(s, cardG[id]);
 }
 
-// ── MODAL ──
+// MODAL
 function openModal(id) {
   mStyle = STYLES.find(function(x){return x.id===id;});
   mGIdx = cardG[id];
   document.getElementById("mName").textContent = mStyle.name;
-  refreshModalDots();
   refreshModal();
   document.getElementById("modal").classList.add("open");
   document.body.style.overflow = "hidden";
 }
 
-function refreshModalDots() {
-  var cont = document.getElementById("mDots");
-  cont.innerHTML = "";
-  GLABELS.forEach(function(_, i) {
-    var dot = document.createElement("div");
-    dot.className = "mdot" + (i===mGIdx?" on":"");
-    dot.addEventListener("click", function(){ swMG(i); });
-    cont.appendChild(dot);
-  });
-}
-
-function swMG(idx) {
-  mGIdx = idx;
-  document.querySelectorAll(".mdot").forEach(function(b,i){ b.classList.toggle("on", i===idx); });
-  setCardSlide(mStyle.id, idx);
+function modalStep(dir) {
+  var next = mGIdx + dir;
+  if(next < 0 || next > MAX_G) return;
+  mGIdx = next;
+  setCardSlide(mStyle.id, mGIdx);
   refreshModal();
 }
 
 function refreshModal() {
-  var theme = SEC_THEME[mStyle.sec] || {grad:"linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)", icon:"✦"};
-  var wrap = document.getElementById("mImgWrap");
-  wrap.style.background = theme.grad;
-  document.getElementById("mIcon").textContent = theme.icon;
-  document.getElementById("mGenderLabel").textContent = GLABELS[mGIdx];
-  document.getElementById("mGender").textContent = GICONS[mGIdx] + "  " + GLABELS[mGIdx];
-  document.getElementById("mCounter").textContent = (mGIdx+1) + " / " + GLABELS.length;
-}
+  var theme = getTheme(mStyle.sec);
+  document.getElementById("mImgWrap").style.background = theme.grad;
+  document.getElementById("mPhIcon").textContent = theme.icon;
+  document.getElementById("mPhLabel").textContent = GLABELS[mGIdx];
+  document.getElementById("mGender").textContent = GICONS[mGIdx]+" "+GLABELS[mGIdx];
+  document.getElementById("mCounter").textContent = (mGIdx+1)+" / "+(MAX_G+1);
 
-// свайп в модалке
-var mTx = 0;
-document.getElementById("modal").addEventListener("touchstart", function(e){ mTx = e.touches[0].clientX; }, {passive:true});
-document.getElementById("modal").addEventListener("touchend", function(e){
-  var diff = mTx - e.changedTouches[0].clientX;
-  if(Math.abs(diff) > 40 && mStyle) {
-    var next = diff > 0 ? Math.min(mGIdx+1, 2) : Math.max(mGIdx-1, 0);
-    if(next !== mGIdx) swMG(next);
-  }
-}, {passive:true});
+  // dots
+  var cont = document.getElementById("mDots"); cont.innerHTML = "";
+  GLABELS.forEach(function(_, i) {
+    var dot = document.createElement("div"); dot.className = "mdot"+(i===mGIdx?" on":"");
+    (function(ii){ dot.addEventListener("click", function(){ modalStep(ii - mGIdx); }); })(i);
+    cont.appendChild(dot);
+  });
+
+  // стрелки модалки
+  var mZL = document.getElementById("mZoneLeft");
+  var mZR = document.getElementById("mZoneRight");
+  if(mZL) mZL.classList.toggle("visible", mGIdx > 0);
+  if(mZR) mZR.classList.toggle("visible", mGIdx < MAX_G);
+}
 
 function closeModal() {
   document.getElementById("modal").classList.remove("open");
@@ -377,17 +359,14 @@ function closeModal() {
 
 function doGenerate() {
   if(!mStyle) return;
-  send(mStyle, mGIdx);
+  doSend(mStyle, mGIdx);
   closeModal();
 }
 
-function send(style, gIdx) {
-  tg.sendData(JSON.stringify({
-    style_id: style.id,
-    style_name: style.name,
-    section: style.sec,
-    gender: GKEYS[gIdx]
-  }));
+function doSend(style, gIdx) {
+  var data = JSON.stringify({style_id:style.id, style_name:style.name, section:style.sec, gender:GKEYS[gIdx]});
+  if(tg && tg.sendData) { tg.sendData(data); }
+  else { console.log("sendData:", data); }
 }
 
 build();
