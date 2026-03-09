@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>AIBABA</title>
-<script src="https://telegram.org/js/telegram-web-app.js"><\/script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -16,62 +16,40 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;background:radial-gradient(ellipse at 50% -10%,rgba(61,90,254,.15) 0%,transparent 70%);pointer-events:none;z-index:0}
-
 .header{position:sticky;top:0;z-index:100;background:rgba(8,9,15,.93);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-icon{width:36px;height:36px;border-radius:8px;overflow:hidden;box-shadow:0 0 14px rgba(79,195,247,.3)}
 .logo-icon img{width:100%;height:100%;object-fit:cover}
 .logo-text{font-size:20px;font-weight:800;letter-spacing:1px;background:linear-gradient(135deg,#4fc3f7,#a78bfa,#e0aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .balance-pill{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--blue)}
-.balance-pill::before{content:'\2B22';font-size:10px}
-
 .main{position:relative;z-index:1;padding:16px 0 100px}
 .section{margin-bottom:24px}
 .section-title{font-size:20px;font-weight:800;padding:0 16px 10px;color:var(--text)}
-
 .cards-row{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .cards-row::-webkit-scrollbar{display:none}
-
 .card{flex:0 0 152px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;animation:fadeUp .4s ease both}
-
 .card-img{position:relative;width:100%;padding-top:125%;overflow:hidden;background:var(--surface2)}
 .card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,var(--surface) 0%,transparent 100%);pointer-events:none;z-index:2}
-
 .badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:4}
-
 .card-slides{position:absolute;inset:0;display:flex;transition:transform .28s cubic-bezier(.25,.46,.45,.94);will-change:transform}
 .card-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center}
 .placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
-.placeholder-icon{font-size:38px;filter:drop-shadow(0 0 14px rgba(255,255,255,.25))}
-.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.45);letter-spacing:1.5px;text-transform:uppercase}
-
-/* Зоны нажатия — левая и правая половины карточки */
+.placeholder-icon{font-size:38px}
+.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase}
 .card-zone{position:absolute;top:0;bottom:0;width:50%;z-index:3;display:flex;align-items:center;cursor:pointer}
 .card-zone-left{left:0;justify-content:flex-start;padding-left:6px}
 .card-zone-right{right:0;justify-content:flex-end;padding-right:6px}
-
-/* Стрелки — только визуал, не перехватывают клик */
-.card-arrow{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px;color:rgba(255,255,255,.7);pointer-events:none;opacity:0;transition:opacity .15s}
-.card-zone:active .card-arrow{opacity:1}
-
-/* Показываем стрелки только если есть куда переключать */
-.card-zone-left.visible .card-arrow,
-.card-zone-right.visible .card-arrow{opacity:.55}
-.card-zone-left.visible:active .card-arrow,
-.card-zone-right.visible:active .card-arrow{opacity:1}
-
-/* Точки */
+.card-arrow{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,.0);pointer-events:none;transition:color .15s}
+.card-zone.show .card-arrow{color:rgba(255,255,255,.65)}
+.card-zone.show:active .card-arrow{color:#fff}
 .card-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:4;pointer-events:none}
 .cdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
 .cdot.on{background:#fff;transform:scale(1.3)}
-
 .card-bottom{padding:8px 10px 10px}
 .card-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .btn-sm{width:100%;padding:7px 0;border:none;border-radius:8px;background:var(--btn-sm);color:#fff;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.3px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s;box-shadow:0 2px 10px rgba(61,90,254,.35)}
 .btn-sm:active{transform:scale(0.97)}
 .btn-sm::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);animation:shimmer 2.5s infinite}
-
-/* MODAL */
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s}
 .modal-bg.open{opacity:1;pointer-events:all}
 .modal-sheet{position:relative;flex:1;display:flex;flex-direction:column;transform:translateY(40px);transition:transform .3s cubic-bezier(.34,1.4,.64,1)}
@@ -79,25 +57,20 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .modal-img-wrap{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
 .modal-img-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(to top,var(--bg),transparent);pointer-events:none;z-index:1}
 .modal-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
-.modal-ph-icon{font-size:80px;filter:drop-shadow(0 0 28px rgba(255,255,255,.2))}
-.modal-ph-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase}
-
+.modal-ph-icon{font-size:80px}
+.modal-ph-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase}
 .modal-counter{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:14px;z-index:5}
 .modal-close{position:absolute;top:12px;right:12px;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.2);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:background .18s}
 .modal-close:active{background:rgba(255,255,255,.2)}
-
-/* Зоны в модалке */
 .modal-zone{position:absolute;top:0;bottom:0;width:40%;z-index:3;display:flex;align-items:center;cursor:pointer}
-.modal-zone-left{left:0;justify-content:flex-start;padding-left:12px}
-.modal-zone-right{right:0;justify-content:flex-end;padding-right:12px}
-.modal-arrow{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.8);pointer-events:none;opacity:0;transition:opacity .2s}
-.modal-zone.visible .modal-arrow{opacity:.6}
-.modal-zone.visible:active .modal-arrow{opacity:1}
-
+.modal-zone-left{left:0;justify-content:flex-start;padding-left:14px}
+.modal-zone-right{right:0;justify-content:flex-end;padding-right:14px}
+.modal-arrow{width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;color:rgba(255,255,255,0);pointer-events:none;transition:color .2s}
+.modal-zone.show .modal-arrow{color:rgba(255,255,255,.7)}
+.modal-zone.show:active .modal-arrow{color:#fff}
 .modal-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:9px;z-index:5}
 .mdot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s,transform .2s;cursor:pointer}
 .mdot.on{background:#fff;transform:scale(1.25)}
-
 .modal-foot{background:var(--bg);padding:14px 16px 28px;border-top:1px solid var(--border)}
 .modal-style-name{font-size:22px;font-weight:800;margin-bottom:4px}
 .modal-gender-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px}
@@ -105,19 +78,16 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .btn-generate:active{transform:scale(0.98)}
 .btn-generate::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);animation:shimmer 3s infinite}
 .btn-generate span{position:relative;z-index:1}
-
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(8,9,15,.95);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 14px;border-radius:10px}
 .nav-btn.active .nav-ico,.nav-btn.active .nav-lbl{color:var(--blue)}
 .nav-ico{font-size:19px;color:var(--muted);transition:color .2s}
 .nav-lbl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.3px;transition:color .2s}
-
 @keyframes shimmer{0%{left:-80%}100%{left:160%}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo">
     <div class="logo-icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAASj0lEQVR42tVaaYxkV3X+vnPve1XV7unu6R7bzAyzegdDWOKAIDB2bMssCiGxjENAkUGECIwJFkuisCSKFIJIBBLChEUQSACHfTMWwTZ4QXbMZuLIscexZ2yPxzM9Mz0zXV3LW+49Jz9eVXVVL7MYiJJSdanqLf3Ouec723cuRTwANQNAAIAB7H9i2REDMHTqhF4kzNC/d7XbVzy76i0kAJgRdBi6yE5WuF/P60TEqHTzS/T7vyD9SYkh+H/74sACT37V7cneSvtVqeF/Of35KwL8/6oC/KXWfrnp+OQ14ZNRwH7Vfj74h08KVyesgMlJLo2t/vOYj6CeZI4ZygNPVnT+WqB/YprIL+3EfLJY47FvP2E56Hhyy89j45mkmQ2buPpJEoCZHRPqdrKmOKYCJyZ9JfSJAm8gjcFgq7juSajhedKwGf5Fg5HswWUVXx05PAQscui0nbzTHycKjUB4VHRhtYIEaIJBIWtLcxx75ziahLV3aa9ks5XqTy41hXG5sQzwq9R9q7tXHy1c6oWVxCRlgH6YVc/lkEwGMQOg/Qq7uqLvIauuPVdEl1/50tWWn305R0zEntwEIf2HkMORxtBHmvbvpMGs6kRs8I9sYJUVsLSSEfyJgodDQBjGMQhKlUwIUKR3j/UEF7JnmN4CCmCgwgSmhBhUEYcMLH0ft2Ms/OqlxKrRY+kFlegCGoUkSRHvnDcQZqbRrNcgkY4UEREAZqoatABV1cxAOppazytkcZFGw/Hi00fD0WgYXSo9Rxx35KwIBZQK66Rz4os8KLyTlNC05garKJI4pjE4io8awExYxlioakSkqZmZRaMuSkyF2ei624pR1eO40nP5WRFhlcUJEuKcDxEvuvLKCy7akdQn5h8//K8f+lCZH4UZhTQ3te7sq15/9anJWNoMd9x129fv/qJ3LJE7rfCogOt5n8XBSo8miiX+UF2wah7gsq58sfQgWT2PEAqFji6xMm7/vSue8aoLyyby3Tb56a8enuuIEWQMum7D089/4WWnLWBDDp1Lv/WTrwpDVKc0mIAwKs3RNEIA7XuaHbdC7YfRVaBvrGIDhxbf9VDTA3f16Rxsbj57aDfCQrTHMg2kSyo7CxHy8uF9ONDM5sr6/maXUMI5etAUhEFQRSMRWh87JBxkGEs84TA66iX9I0LKkPQCEdJXUci5sPtnjwWdLQ+3bLaVl21ChITBRFuHDz3w3UfTvNjN8Qd33UdGYSISzRSAwswMNEJ7BjEdyHoMhoKL5fSiBbi0yOmd6gUTkoSQQnGgE/EiTsRDPN24T6egJCJjSzXSIkBCxNI6phy8IuZ2yJirhqB5jKVqqRZV1aCGqDCoqkWrgAQDrUp6y1zZBv3AcOYaiUk0GWSjigIjRSgQTxGRRCQxOkpCehpgRvGEc3SkwZQUM0BNNRCgmaOQMItRS0MZYtHTwdQQoylUzeJichiJSEsgZH7Vyr2XVtlffgEgFFIgjvQiiTjnfH18YlqSFEYYYUI4iwbVvOjGWJgxSZI0bSTwHuboHQCLqqEI3YXOETgGGJSG0owCGmlGgrbIA9rKdR7NH6v27CtWpaleFKIjnTjnkyTPwiXXvPHS116RZ0YTU7oAKYFM6w77H9z3kXe/szE99c73fmBdMpGWrBldCZ/B5WadsCbiM9//9Bd+9tlaUiuRW6zipqkZWXl1tD6UgZVc2cRbVVuO4sc4bBfpp7LKB5xI6n3i0kZqJc4+b/dT1oeDMYFzEWmEj0hqUAd3+oRzNUknk/GzNEceoQE+h8/hMpMspvQbJ85KXVJzdaCXzSK0ysEkYc6GqoxV+gFbuVNeLBk4CJeECJ2n9908ioayk4csp8El8KZS1W9m5gEnmWYhlFoWRRkCHKG9sE4aIURH0cq6nW4GlWiWuASVA0ABNRMMSW9Li0o7Zj9gy5tmIYT04hLfGH/WKy6eWr/eirD9/DM7R9vtfR3n6lQ6+JqJy0OL7sjsfIxZWWT7Z9s5EnbpgrhcXaEuj+iUljaevuXcqy66qsHa3oN773j4NhNVizTphaCBH4wqsyTHJivUDosWkGr5pYqYSR1MTz3nvLfc/LXGVBICFgrs2XngS1e+KYYSPqFLSDJAgqHbYXFQ4V1yukQTpTMPU2gMoZnWp95/xcfPH58Zj5goMXf00OU3vvJgtq/QImgWNZpVxXbZX0wd7dpWsMBiKc4R92UPVBSKGFlbO30atNaJeRFLl6BeR76A+X0UUQ1UwEQBEe+SU4hYtHdCI1QrzxKIamHJU8XSVrPsZEVe1Ios1l1dKAISQkSwCp79ymK0MR34ql+egLmsHSPESFKMArokSWdSh0RqRACd0dUmWO9KkvYKvxgtqFSxwyRNp2Dm6Wig0czK0PFuTVlE8wYIQGGVOigUViWi2vEbfVvJB2yI7OvnwkovEXGmTvOiq1Y3BLWix5RQ6EMe86IQgxem9TrMaCAUBM1lnUIVZpom4p0npSysUGOhSREtr7qDQQNNsMoIfWlGLNDvTnkcalFGGiWKcwnExxD2l1gjbJc4CC2iCVxehI0Xv/BpO57rTXf9bOeDN9yaJgmiAnTCMshrXvu6p23c3J1b+MHtd9714G1p6ooydjW60uoBVBGKw5K4accl8vwx6Sqt7FsVHULptLNQ5n6+de/h0pnW6iknWKg3WCzyyUte8Jw3viIBim//fOc3b5M6TQEj4Y1++zMv/J2ztk/MY353vP3+Wwh2cnSTRDudhU7Llc2j+cLRsuVMBZ6IBgx3ZDZSL9iA1fEr1xDL0wIZzS5+9eVbztgW08bY3r2t2YWbP//tvJ3FotDsCCiaFwVAIHRyQnuLQgJQiXvmsntSrJnHXLtwRFke/NSP3gKNG6e2X7rxksmsdtXZf2wa7j30i+/u/Y5AtMfq9UmwVeplv0Ki4IBXqEgCqwiPNK2dd/U1a8/bFHMgD+PP8NmHP7bvrhvra2bS8RlYbD52aPd9R8YMRx6Zo0Vob66ppiD27D7o9z3u2/rwgT1OVDWbXfjpQnlg7fTVZ85cLLX5c8LzpkNt8+Qd333iW31O4Pi02woQMrO+j2hVAhlANQqeONA+XAsWc594pC6trRubPD0Zm9RoyVh97+e++NXrv0EyNdTGGqYGM6oBTGG3fuOvb85LmDpfJknNzOq1GQNiWXui1WW7M1u21oax2W5TIEaruoTjErJ+lURsFZCszzgBFjWGDqQFMyCNKIkiKQqlj04ImGiQbgZjjMglAZAmdVOUoWWwaEWSOqpKDxhWhJBrKLWba2kWHNRbnlnogX+IMDoG1bgasTUy5rbKodWKppbjhTG4mqe3tTPT2LIhIp2fO0yICM2cSxsve/01p81Mz+2eu/Hz17l6+rsvf+tMberQ7j3fvP0TdCXNDCpMN6yd0Tg1VV/XKQuLgUWhUbtaGMyqGGw87jzIH3fMbGak0qiqMTQ0jsWQZZ08FPNPf9Ufnn76VYceXbjhr64ti31kAg3wrrF5x9jEZNGZR/yoimvUdkzIpIztTvBJJWBiMa9NbL38WR88NXd7m0f2t2ZrEY2YJJoU0aku5jDaceYMflVqdEkEJmLRvu9zH10zc7Zv1Lc/+zdrIq2J6c7+sfKIOksCVMhopmVsHyjaXbTmulELFK55OBtL1zTbHbMSVTsmoub3zcV2gGPw7mBZFvcdfbDUzuHOfyqU6MefKoSsTlb7lZvmxWPWY9NAUTx+16dV85lzLtz2268MeaEtYd61dgAdkRBeHFDmt3/2PTUZK/NWYJd5fusP/qLuxkLZNMJRQAodmRpCiSKEel03JcjuP/qe/fkuBy+QiAiYjvLYy6hR9lvK4+1a6JPJTJKxWDq6WudwgTxz3idJEhdC0Wl3y3lhzcxUs/bCrQKSTNJx03DwyJ0wg0YnDedSowTtIOmUqkUMsQgWrI5CmKYYc2SwvF946rHHe1XrwZWJXVsywaWZqQbTUssQO4Urgzrkma1J/WWv+ZM8HKEJg6KwH9/6ncNHH0okNVOA9draPO9sP+NFLzh7R8yjBQndrnfrkKMIJSyoWWmlWVQLgFjf7scevFalk19e3xkXJ0ADUtlgpPbomqi60EVZ0HnCLYhruAtEyELFtJFONtw90AfABgddOYN35zG7DN0jEpGWik6RhRYsqOZQowWFKiNBM8PQmMDMFplBDnPxVUs5SgKPjNC5ROPqI1qIEuoMZEwcfczzVnZIzBgB0xxFjCUJig6mCUKGWDSbB0IxDyWjWowJar6iRKFBy2iB6A8+hvDTk5CCyrlHGQoS6QoQMhkaUfRbs4pEMvX1tRu2/4H34wJHDaesPXt6+tmiRgNURf26mZYb7zA4D2FpyJRl3s3XLTzhxEpEtWgSi9n2T1vlfkJp6BYHHm79W9TS0KPrzGKf960Q0XNo2lCFBowqMLCUDUjcQVEtAKVPsqt2CU9JozbPfO61Z216Q9k+6ugAmirgHRzVGMFgjOaULANiNFVosFg2UP/57AcebN6U8BRFANQhNTNDNCiqv153PwjlOrwnoRLPk9Wop9dBwJZIP0xK9xlj+iSZACmSSkmEpGx3Y16YeFbtaAyx4tICEE1UQ4QoRQEN0Bhj4QknaSrjiaurBtWKV4w9CWnUXk3GwVALDtVUipB+hPGDUY7BoIMZGEd7Gu19oRECmFXTIY2GsmzNc606pRjN4Cp+Tk1MoMpqpmcGmNBAGpQijiw1M2pFKoJqZqSYac9ThVg+oQGJ6jk9UxBMF2focKvtBiCFGDBFFcNVEY9WSybXTp7T76RFUJGtINlPoyQq8tlUYxUeTYuDnZ2ldWlmplbNaQCzUCHdUJF0EeCyhGADJA0rAI5snWCfvh7gp0dN9wl2ERDwpJmV1bBGKGZDdTytN5BfxGk1So0AHFOSWjEoFmFqhFX9AwbjJhui2m10z5dVPrDaNgIOzQwHDIsMvlS8vBNx3hMNM/HeqarpoKEgqP1JcO8oKc6JxqixoqBVxKlGQEAYjAYh1djfV4nR/Z9LJXT9gpRL5umVoH01qplAFdCrlxN6EQdInpVm9M43m20CSZJWFidH+I2KWFLVZqtFQ5L4irbtDWVZ0WkDTkIG9D+54vC7BxBHplwqPfqCukViCyQ9Seecc4kT55wjZHzNxCc/+eFtTz3z0ceeeO/73uZ97aGHHqnVaj1KXkihc44UoYtBN27c+I63vxkmjz7yWJrWemYRJ0IR6WET0u9oBiy0LQ6aj7lfSKp3tdiDDF0Ni0SYpqkqut1cFdWXrVu2Xvnql7/owudv3rTpz6593SUXX9TtFKpMk9T7NHFp4muhNCi9JKGMGzdu/vO/fNNLX3ZpNysISZLUOeedE+fKECvXAuGcE4rAVbFBFndlyfEbmkr6xVRX6UPnnGu3u5u3bNuydfPex/Z77wHu2vXoW6/+23t+/l+1mosxNpvdTRs3rd946s4HdiWeaqZq5557zkKz1e1kY2PjABdasdXsbl6/ZXrd1H8//FCtVs/ybr02dubWM/ft3weYWmwuHBXxFmOVmIwgHC3qcjCRjf77lOotMiEy4dykc5POTSV+OvHrGvX1wunXXfW2ffuPmNmuXbOzs83PfOqbZ59x0c6de//hg9dfvOOqTkfvvvPBJ/YebbfDF/7lxq0bdpyx+aIvf+mmdjvueXTuJ3c/8KPb7738Fdfu2dO867YHHr5/dv/e5t/9zccnG+dccP7Lbrnhx48/Onfnbff+6JZffOX6762d2NpIT68npyV+OnFrK2G8TIqMC8fJUwZi+yWmkYrJ4mDcT0Ccc3nRueCC5133sb9//PED//y5L116ycXbtp2WZ6Vz/syzNqybngzB8ky3nbHp1h/++6bN6//otS/9j3t2njI+dsWrLrnhO3fnWXbpZS9++KFHYkR7Id+wZf0dt9217tSZN1/zxnt/cf9lF13y3Bc856bv/zDPy996/nO6ZZ6maZZ1SdJE2WvRelHRlKD2SV8/vMNH0IPgQPoqbopQtXzJSy5zzl39pnfddMtXvn7BS79/81dCtBituWCdrAghutR9/B+vf9+733/++ed++euf2HHRiycn1txx+/1/+oZ3tOYXrvvEB5/5G09rzrfI5Ftf+9673v6erdu2/dPnP3b5718+Pb32zjt/+ra3vHPu8PxHr/vIUzc/JcYqKxtBMWrlwVVkqnQgq70YfhDje4Xn8B4aDI3G4BJfazZ17vDRRm19q9U5cjSUwdS00wllCTV0uzh0cGFyaqLZ6hw40Op0ynrdjhyZJ6QxdsqBA808txBj1o379x1qjNVD1LmD7WY7E98+PH+om2VjY2NzB9vTMyXpAGFVvZG0Km/1598UmgIC2v8ATV3C8cKKsH4AAAAASUVORK5CYII=" alt="logo"></div>
@@ -125,15 +95,12 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
   </div>
   <div class="balance-pill" id="balancePill">3 фото</div>
 </div>
-
 <div class="main" id="main"></div>
-
 <div class="bottom-nav">
-  <div class="nav-btn active"><div class="nav-ico">&#10022;</div><div class="nav-lbl">Стили</div></div>
-  <div class="nav-btn"><div class="nav-ico">&#128444;</div><div class="nav-lbl">Мои фото</div></div>
-  <div class="nav-btn"><div class="nav-ico">&#11206;</div><div class="nav-lbl">Баланс</div></div>
+  <div class="nav-btn active"><div class="nav-ico">✦</div><div class="nav-lbl">Стили</div></div>
+  <div class="nav-btn"><div class="nav-ico">🖼</div><div class="nav-lbl">Мои фото</div></div>
+  <div class="nav-btn"><div class="nav-ico">⬡</div><div class="nav-lbl">Баланс</div></div>
 </div>
-
 <div class="modal-bg" id="modal">
   <div class="modal-sheet">
     <div class="modal-img-wrap" id="mImgWrap">
@@ -141,13 +108,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
         <div class="modal-ph-icon" id="mPhIcon"></div>
         <div class="modal-ph-label" id="mPhLabel"></div>
       </div>
-      <!-- Зоны переключения в модалке -->
-      <div class="modal-zone modal-zone-left" id="mZoneLeft" onclick="modalStep(-1)">
-        <div class="modal-arrow">&#8249;</div>
-      </div>
-      <div class="modal-zone modal-zone-right" id="mZoneRight" onclick="modalStep(1)">
-        <div class="modal-arrow">&#8250;</div>
-      </div>
+      <div class="modal-zone modal-zone-left" id="mZoneL" onclick="modalStep(-1)"><div class="modal-arrow">&#8249;</div></div>
+      <div class="modal-zone modal-zone-right" id="mZoneR" onclick="modalStep(1)"><div class="modal-arrow">&#8250;</div></div>
       <div class="modal-counter" id="mCounter">1 / 3</div>
       <button class="modal-close" onclick="closeModal()">&#10005;</button>
       <div class="modal-dots" id="mDots"></div>
@@ -156,165 +118,145 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
       <div class="modal-style-name" id="mName"></div>
       <div class="modal-gender-label" id="mGender"></div>
       <button class="btn-generate" onclick="doGenerate()">
-        <span>&#10022; Сгенерировать (1 фото)</span>
+        <span>✦ Сгенерировать (1 фото)</span>
       </button>
     </div>
   </div>
 </div>
-
 <script>
-var tg = window.Telegram ? window.Telegram.WebApp : null;
-if(tg){ tg.expand(); tg.enableClosingConfirmation(); }
+var tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+if (tg) { tg.expand(); tg.enableClosingConfirmation(); }
 
-var GKEYS   = ["male","female","couple"];
-var GLABELS = ["Мужской","Женский","Пара"];
-var GICONS  = ["\u{1F468}","\u{1F469}","\u{1F46B}"];
+var GKEYS   = ["male", "female", "couple"];
+var GLABELS = ["Мужской", "Женский", "Пара"];
+var GICONS  = ["👨", "👩", "👫"];
+var MAX_G   = 2;
 
 var SEC_THEME = {
-  "\u0411\u0438\u0437\u043D\u0435\u0441":   {grad:"linear-gradient(160deg,#0f2027,#203a43,#2c5364)", icon:"\u{1F4BC}"},
-  "\u041B\u044E\u043A\u0441":     {grad:"linear-gradient(160deg,#1a0533,#3d1c6e,#6a3fa6)", icon:"\u{1F451}"},
-  "Street":   {grad:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)", icon:"\u{1F3A8}"},
-  "\u041F\u0440\u0438\u0440\u043E\u0434\u0430":  {grad:"linear-gradient(160deg,#134e5e,#1a6b3a,#2d8653)", icon:"\u{1F33F}"},
-  "\u041F\u0440\u0430\u0437\u0434\u043D\u0438\u043A\u0438":{grad:"linear-gradient(160deg,#2c1654,#8b1a6b,#c0392b)", icon:"\u{1F389}"}
+  "Бизнес":    { grad: "linear-gradient(160deg,#0f2027,#203a43,#2c5364)", icon: "💼" },
+  "Люкс":      { grad: "linear-gradient(160deg,#1a0533,#3d1c6e,#6a3fa6)", icon: "👑" },
+  "Street":    { grad: "linear-gradient(160deg,#0f0c29,#302b63,#24243e)", icon: "🎨" },
+  "Природа":   { grad: "linear-gradient(160deg,#134e5e,#1a6b3a,#2d8653)", icon: "🌿" },
+  "Праздники": { grad: "linear-gradient(160deg,#2c1654,#8b1a6b,#c0392b)", icon: "🎉" }
 };
 
 var STYLES = [
-  {id:"biz_office", sec:"Бизнес",    name:"Деловой офис",    badge:true},
-  {id:"biz_city",   sec:"Бизнес",    name:"Город & карьера", badge:false},
-  {id:"biz_conf",   sec:"Бизнес",    name:"Конференция",     badge:false},
-  {id:"lux_night",  sec:"Люкс",      name:"Ночной кэжуал",   badge:true},
-  {id:"lux_prem",   sec:"Люкс",      name:"Премиум",         badge:false},
-  {id:"str_day",    sec:"Street",    name:"Уличный день",    badge:false},
-  {id:"str_art",    sec:"Street",    name:"Граффити",        badge:true},
-  {id:"nat_forest", sec:"Природа",   name:"Лесная прогулка", badge:false},
-  {id:"nat_ocean",  sec:"Природа",   name:"Океан & закат",   badge:false},
-  {id:"hol_ny",     sec:"Праздники", name:"Новый год",       badge:true},
-  {id:"hol_bday",   sec:"Праздники", name:"День рождения",   badge:false}
+  { id:"biz_office", sec:"Бизнес",    name:"Деловой офис",    badge:true  },
+  { id:"biz_city",   sec:"Бизнес",    name:"Город и карьера", badge:false },
+  { id:"biz_conf",   sec:"Бизнес",    name:"Конференция",     badge:false },
+  { id:"lux_night",  sec:"Люкс",      name:"Ночной кэжуал",   badge:true  },
+  { id:"lux_prem",   sec:"Люкс",      name:"Премиум",         badge:false },
+  { id:"str_day",    sec:"Street",    name:"Уличный день",    badge:false },
+  { id:"str_art",    sec:"Street",    name:"Граффити",        badge:true  },
+  { id:"nat_forest", sec:"Природа",   name:"Лесная прогулка", badge:false },
+  { id:"nat_ocean",  sec:"Природа",   name:"Океан и закат",   badge:false },
+  { id:"hol_ny",     sec:"Праздники", name:"Новый год",       badge:true  },
+  { id:"hol_bday",   sec:"Праздники", name:"День рождения",   badge:false }
 ];
 
 var cardG = {};
-STYLES.forEach(function(s){ cardG[s.id] = 0; });
+STYLES.forEach(function(s) { cardG[s.id] = 0; });
 var mStyle = null, mGIdx = 0;
-var MAX_G = 2;
+
+function getTheme(sec) {
+  return SEC_THEME[sec] || { grad:"linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)", icon:"✦" };
+}
 
 function build() {
   var secs = {};
-  STYLES.forEach(function(s){ if(!secs[s.sec]) secs[s.sec]=[]; secs[s.sec].push(s); });
+  STYLES.forEach(function(s) { if (!secs[s.sec]) secs[s.sec] = []; secs[s.sec].push(s); });
   var main = document.getElementById("main");
   Object.keys(secs).forEach(function(title) {
-    var list = secs[title];
     var sec = document.createElement("div"); sec.className = "section";
-    var th = document.createElement("div"); th.className = "section-title"; th.textContent = title;
-    sec.appendChild(th);
+    var th  = document.createElement("div"); th.className  = "section-title"; th.textContent = title;
     var row = document.createElement("div"); row.className = "cards-row";
-    list.forEach(function(s){ row.appendChild(makeCard(s)); });
-    sec.appendChild(row);
+    secs[title].forEach(function(s) { row.appendChild(makeCard(s)); });
+    sec.appendChild(th); sec.appendChild(row);
     main.appendChild(sec);
   });
-}
-
-function getTheme(sec) {
-  return SEC_THEME[sec] || {grad:"linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)", icon:"\u2726"};
 }
 
 function makeCard(s) {
   var theme = getTheme(s.sec);
   var d = document.createElement("div"); d.className = "card";
 
-  // card-img
   var wrap = document.createElement("div");
-  wrap.className = "card-img"; wrap.id = "cimg-"+s.id;
+  wrap.className = "card-img"; wrap.id = "cimg-" + s.id;
 
-  if(s.badge) {
-    var b = document.createElement("span"); b.className = "badge"; b.textContent = "НОВОЕ";
-    wrap.appendChild(b);
+  if (s.badge) {
+    var bEl = document.createElement("span"); bEl.className = "badge"; bEl.textContent = "НОВОЕ";
+    wrap.appendChild(bEl);
   }
 
-  // slides
   var slides = document.createElement("div");
-  slides.className = "card-slides"; slides.id = "cs-"+s.id;
-  GLABELS.forEach(function(gl, i) {
+  slides.className = "card-slides"; slides.id = "cs-" + s.id;
+  GLABELS.forEach(function(gl) {
     var slide = document.createElement("div"); slide.className = "card-slide";
     slide.style.background = theme.grad;
     var ph = document.createElement("div"); ph.className = "placeholder";
-    ph.innerHTML = '<div class="placeholder-icon">'+theme.icon+'</div><div class="placeholder-label">'+gl+'</div>';
-    slide.appendChild(ph);
-    slides.appendChild(slide);
+    ph.innerHTML = "<div class=\"placeholder-icon\">" + theme.icon + "</div><div class=\"placeholder-label\">" + gl + "</div>";
+    slide.appendChild(ph); slides.appendChild(slide);
   });
   wrap.appendChild(slides);
 
-  // dots
-  var dotsEl = document.createElement("div"); dotsEl.className = "card-dots"; dotsEl.id = "cd-"+s.id;
+  var dotsEl = document.createElement("div"); dotsEl.className = "card-dots"; dotsEl.id = "cd-" + s.id;
   GLABELS.forEach(function(_, i) {
-    var dot = document.createElement("div"); dot.className = "cdot"+(i===0?" on":"");
+    var dot = document.createElement("div"); dot.className = "cdot" + (i === 0 ? " on" : "");
     dotsEl.appendChild(dot);
   });
   wrap.appendChild(dotsEl);
 
-  // Зона ЛЕВАЯ (назад) — нажатие в левой половине
   var zL = document.createElement("div");
-  zL.className = "card-zone card-zone-left";
-  zL.id = "czl-"+s.id;
-  zL.innerHTML = '<div class="card-arrow">&#8249;</div>';
-  zL.addEventListener("click", function(e){ e.stopPropagation(); cardStep(s.id, -1); });
+  zL.className = "card-zone card-zone-left"; zL.id = "czl-" + s.id;
+  zL.innerHTML = "<div class=\"card-arrow\">&#8249;</div>";
+  zL.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); cardStep(id, -1); }; })(s.id));
   wrap.appendChild(zL);
 
-  // Зона ПРАВАЯ (вперёд) — нажатие в правой половине
   var zR = document.createElement("div");
-  zR.className = "card-zone card-zone-right visible"; // сначала видна только правая
-  zR.id = "czr-"+s.id;
-  zR.innerHTML = '<div class="card-arrow">&#8250;</div>';
-  zR.addEventListener("click", function(e){ e.stopPropagation(); cardStep(s.id, 1); });
+  zR.className = "card-zone card-zone-right show"; zR.id = "czr-" + s.id;
+  zR.innerHTML = "<div class=\"card-arrow\">&#8250;</div>";
+  zR.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); cardStep(id, 1); }; })(s.id));
   wrap.appendChild(zR);
 
-  d.appendChild(wrap);
+  wrap.addEventListener("click", (function(id) { return function() { openModal(id); }; })(s.id));
 
-  // card-bottom
   var bot = document.createElement("div"); bot.className = "card-bottom";
   var nameEl = document.createElement("div"); nameEl.className = "card-name"; nameEl.textContent = s.name;
-  var btn = document.createElement("button"); btn.className = "btn-sm"; btn.innerHTML = "&#10022; Создать";
-  btn.addEventListener("click", function(e){ e.stopPropagation(); quickGen(s.id); });
+  var btn = document.createElement("button"); btn.className = "btn-sm"; btn.textContent = "✦ Создать";
+  btn.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); quickGen(id); }; })(s.id));
   bot.appendChild(nameEl); bot.appendChild(btn);
-  d.appendChild(bot);
 
-  // Центр карточки — открывает модалку
-  wrap.addEventListener("click", function(e){
-    // Если клик не попал в зоны — открываем модалку
-    openModal(s.id);
-  });
-
+  d.appendChild(wrap); d.appendChild(bot);
   return d;
 }
 
 function cardStep(id, dir) {
-  var cur = cardG[id];
+  var cur  = cardG[id];
   var next = cur + dir;
-  if(next < 0 || next > MAX_G) return;
+  if (next < 0 || next > MAX_G) return;
   setCardSlide(id, next);
 }
 
 function setCardSlide(id, idx) {
   cardG[id] = idx;
-  var sl = document.getElementById("cs-"+id);
-  var dt = document.getElementById("cd-"+id);
-  var zL = document.getElementById("czl-"+id);
-  var zR = document.getElementById("czr-"+id);
-  if(sl) sl.style.transform = "translateX(-"+(idx*100)+"%)";
-  if(dt) dt.querySelectorAll(".cdot").forEach(function(d,i){ d.classList.toggle("on", i===idx); });
-  // показываем/скрываем стрелки в зависимости от позиции
-  if(zL) zL.classList.toggle("visible", idx > 0);
-  if(zR) zR.classList.toggle("visible", idx < MAX_G);
+  var sl  = document.getElementById("cs-"  + id);
+  var dt  = document.getElementById("cd-"  + id);
+  var czl = document.getElementById("czl-" + id);
+  var czr = document.getElementById("czr-" + id);
+  if (sl) sl.style.transform = "translateX(-" + (idx * 100) + "%)";
+  if (dt) dt.querySelectorAll(".cdot").forEach(function(d, i) { d.classList.toggle("on", i === idx); });
+  if (czl) czl.classList.toggle("show", idx > 0);
+  if (czr) czr.classList.toggle("show", idx < MAX_G);
 }
 
 function quickGen(id) {
-  var s = STYLES.find(function(x){return x.id===id;});
+  var s = STYLES.find(function(x) { return x.id === id; });
   doSend(s, cardG[id]);
 }
 
-// MODAL
 function openModal(id) {
-  mStyle = STYLES.find(function(x){return x.id===id;});
-  mGIdx = cardG[id];
+  mStyle = STYLES.find(function(x) { return x.id === id; });
+  mGIdx  = cardG[id];
   document.getElementById("mName").textContent = mStyle.name;
   refreshModal();
   document.getElementById("modal").classList.add("open");
@@ -323,7 +265,7 @@ function openModal(id) {
 
 function modalStep(dir) {
   var next = mGIdx + dir;
-  if(next < 0 || next > MAX_G) return;
+  if (next < 0 || next > MAX_G) return;
   mGIdx = next;
   setCardSlide(mStyle.id, mGIdx);
   refreshModal();
@@ -332,24 +274,18 @@ function modalStep(dir) {
 function refreshModal() {
   var theme = getTheme(mStyle.sec);
   document.getElementById("mImgWrap").style.background = theme.grad;
-  document.getElementById("mPhIcon").textContent = theme.icon;
+  document.getElementById("mPhIcon").textContent  = theme.icon;
   document.getElementById("mPhLabel").textContent = GLABELS[mGIdx];
-  document.getElementById("mGender").textContent = GICONS[mGIdx]+" "+GLABELS[mGIdx];
-  document.getElementById("mCounter").textContent = (mGIdx+1)+" / "+(MAX_G+1);
-
-  // dots
+  document.getElementById("mGender").textContent  = GICONS[mGIdx] + "  " + GLABELS[mGIdx];
+  document.getElementById("mCounter").textContent = (mGIdx + 1) + " / " + (MAX_G + 1);
   var cont = document.getElementById("mDots"); cont.innerHTML = "";
   GLABELS.forEach(function(_, i) {
-    var dot = document.createElement("div"); dot.className = "mdot"+(i===mGIdx?" on":"");
-    (function(ii){ dot.addEventListener("click", function(){ modalStep(ii - mGIdx); }); })(i);
+    var dot = document.createElement("div"); dot.className = "mdot" + (i === mGIdx ? " on" : "");
+    dot.addEventListener("click", (function(ii) { return function() { mGIdx = ii; setCardSlide(mStyle.id, ii); refreshModal(); }; })(i));
     cont.appendChild(dot);
   });
-
-  // стрелки модалки
-  var mZL = document.getElementById("mZoneLeft");
-  var mZR = document.getElementById("mZoneRight");
-  if(mZL) mZL.classList.toggle("visible", mGIdx > 0);
-  if(mZR) mZR.classList.toggle("visible", mGIdx < MAX_G);
+  document.getElementById("mZoneL").classList.toggle("show", mGIdx > 0);
+  document.getElementById("mZoneR").classList.toggle("show", mGIdx < MAX_G);
 }
 
 function closeModal() {
@@ -358,18 +294,17 @@ function closeModal() {
 }
 
 function doGenerate() {
-  if(!mStyle) return;
+  if (!mStyle) return;
   doSend(mStyle, mGIdx);
   closeModal();
 }
 
 function doSend(style, gIdx) {
-  var data = JSON.stringify({style_id:style.id, style_name:style.name, section:style.sec, gender:GKEYS[gIdx]});
-  if(tg && tg.sendData) { tg.sendData(data); }
-  else { console.log("sendData:", data); }
+  var data = JSON.stringify({ style_id: style.id, style_name: style.name, section: style.sec, gender: GKEYS[gIdx] });
+  if (tg && tg.sendData) { tg.sendData(data); }
 }
 
 build();
-<\/script>
+</script>
 </body>
 </html>
