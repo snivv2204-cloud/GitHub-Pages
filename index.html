@@ -17,7 +17,6 @@
   --glow:    #3d5afe;
   --text:    #eeeef5;
   --muted:   #5a5c78;
-  --soft:    #9a9bb8;
   --badge:   #2ecc71;
   --btn:     linear-gradient(135deg,#3d5afe 0%,#7b52d4 50%,#4fc3f7 100%);
   --btn-sm:  linear-gradient(135deg,#3d5afe,#7b52d4);
@@ -48,19 +47,22 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 
 /* CARD */
 .card{flex:0 0 152px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;transition:border-color .2s,transform .15s;animation:fadeUp .4s ease both}
-.card:active{transform:scale(0.97)}
 
 /* Image 3:4 */
 .card-img{position:relative;width:100%;padding-top:125%;overflow:hidden;background:var(--surface2);cursor:pointer}
-.card-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transition:transform .3s}
-.card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,var(--surface) 0%,transparent 100%);pointer-events:none}
+.card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,var(--surface) 0%,transparent 100%);pointer-events:none;z-index:1}
 
-.badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:2}
+.badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:3}
 
-/* Gender switcher ON card */
-.gender-sw{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:3;white-space:nowrap}
-.gsw-btn{padding:3px 8px;border-radius:9px;font-size:10px;font-weight:700;border:1.5px solid rgba(255,255,255,.18);background:rgba(8,9,15,.6);backdrop-filter:blur(6px);color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s}
-.gsw-btn.on{background:rgba(79,195,247,.2);border-color:var(--blue);color:var(--blue)}
+/* Card inner slider */
+.card-slides{position:absolute;inset:0;display:flex;transition:transform .28s cubic-bezier(.25,.46,.45,.94)}
+.card-slide{flex:0 0 100%;height:100%}
+.card-slide img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+
+/* Dots on card */
+.card-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:2;pointer-events:none}
+.cdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
+.cdot.on{background:#fff;transform:scale(1.3)}
 
 /* Card bottom */
 .card-bottom{padding:8px 10px 10px}
@@ -85,9 +87,9 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .modal-close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);border:none;color:#fff;font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:background .18s}
 .modal-close:active{background:rgba(255,255,255,.15)}
 
-.modal-gender-tabs{position:absolute;bottom:46px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:5}
-.mgtab{padding:5px 14px;border-radius:12px;font-size:12px;font-weight:700;border:1.5px solid rgba(255,255,255,.22);background:rgba(8,9,15,.55);backdrop-filter:blur(8px);color:rgba(255,255,255,.45);cursor:pointer;transition:all .18s}
-.mgtab.on{background:rgba(79,195,247,.2);border-color:var(--blue);color:var(--blue)}
+.modal-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:7px;z-index:5}
+.mdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s,transform .2s;cursor:pointer}
+.mdot.on{background:#fff;transform:scale(1.25)}
 
 .modal-foot{background:var(--bg);padding:14px 16px 28px;border-top:1px solid var(--border)}
 .modal-style-name{font-size:22px;font-weight:800;margin-bottom:12px}
@@ -132,7 +134,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
       <img id="mImg" src="" alt="">
       <div class="modal-counter" id="mCounter">1 / 3</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
-      <div class="modal-gender-tabs" id="mGenderTabs"></div>
+      <div class="modal-dots" id="mDots"></div>
     </div>
     <div class="modal-foot">
       <div class="modal-style-name" id="mName"></div>
@@ -148,8 +150,7 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.enableClosingConfirmation();
 
-const GENDERS = ['Мужской','Женский','Пара'];
-const GKEYS   = ['male','female','couple'];
+const GKEYS = ['male','female','couple'];
 
 const STYLES = [
   {id:'biz_office',sec:'Бизнес',name:'Деловой офис',badge:true,
@@ -176,9 +177,8 @@ const STYLES = [
    imgs:['https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500&q=80','https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500&q=80','https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500&q=80']},
 ];
 
-const cardG = {}; // gender index per card
+const cardG = {};
 STYLES.forEach(s => cardG[s.id] = 0);
-
 let mStyle = null, mGIdx = 0;
 
 // ── BUILD ──
@@ -201,32 +201,50 @@ function build() {
 function makeCard(s) {
   const d = document.createElement('div');
   d.className = 'card';
+  const slides = s.imgs.map(url =>
+    `<div class="card-slide"><img src="${url}" loading="lazy" alt=""></div>`
+  ).join('');
+  const dots = s.imgs.map((_,i) =>
+    `<div class="cdot${i===0?' on':''}"></div>`
+  ).join('');
   d.innerHTML = `
     <div class="card-img" onclick="openModal('${s.id}')">
       ${s.badge?'<span class="badge">НОВОЕ</span>':''}
-      <img id="ci-${s.id}" src="${s.imgs[0]}" loading="lazy" alt="${s.name}">
-      <div class="gender-sw">
-        ${GENDERS.map((g,i)=>`<div class="gsw-btn${i===0?' on':''}" onclick="swG(event,'${s.id}',${i})">${g}</div>`).join('')}
-      </div>
+      <div class="card-slides" id="cs-${s.id}">${slides}</div>
+      <div class="card-dots" id="cd-${s.id}">${dots}</div>
     </div>
     <div class="card-bottom">
       <div class="card-name">${s.name}</div>
-      <button class="btn-sm" onclick="quickGen('${s.id}')">✦ Создать</button>
+      <button class="btn-sm" onclick="event.stopPropagation();quickGen('${s.id}')">✦ Создать</button>
     </div>`;
+
+  // свайп на карточке
+  const img = d.querySelector('.card-img');
+  let tx = 0;
+  img.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  img.addEventListener('touchend', e => {
+    const diff = tx - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 30) {
+      e.stopPropagation();
+      const cur = cardG[s.id];
+      const next = diff > 0 ? Math.min(cur+1, s.imgs.length-1) : Math.max(cur-1, 0);
+      if(next !== cur) setCardSlide(s.id, next);
+    }
+  }, {passive:true});
+
   return d;
 }
 
-function swG(e, id, idx) {
-  e.stopPropagation();
+function setCardSlide(id, idx) {
   cardG[id] = idx;
-  const s = STYLES.find(x=>x.id===id);
-  document.getElementById('ci-'+id).src = s.imgs[idx];
-  e.currentTarget.parentNode.querySelectorAll('.gsw-btn').forEach((b,i)=>b.classList.toggle('on',i===idx));
+  const sl = document.getElementById('cs-'+id);
+  const dt = document.getElementById('cd-'+id);
+  if(sl) sl.style.transform = `translateX(-${idx*100}%)`;
+  if(dt) dt.querySelectorAll('.cdot').forEach((d,i) => d.classList.toggle('on', i===idx));
 }
 
 function quickGen(id) {
-  const s = STYLES.find(x=>x.id===id);
-  send(s, cardG[id]);
+  send(STYLES.find(x=>x.id===id), cardG[id]);
 }
 
 // ── MODAL ──
@@ -234,23 +252,17 @@ function openModal(id) {
   mStyle = STYLES.find(x=>x.id===id);
   mGIdx = cardG[id];
   document.getElementById('mName').textContent = mStyle.name;
-  // gender tabs
-  document.getElementById('mGenderTabs').innerHTML =
-    GENDERS.map((g,i)=>`<div class="mgtab${i===mGIdx?' on':''}" onclick="swMG(${i})">${g}</div>`).join('');
+  document.getElementById('mDots').innerHTML =
+    mStyle.imgs.map((_,i) => `<div class="mdot${i===mGIdx?' on':''}" onclick="swMG(${i})"></div>`).join('');
   refreshModal();
   document.getElementById('modal').classList.add('open');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
 
 function swMG(idx) {
   mGIdx = idx;
-  document.querySelectorAll('.mgtab').forEach((b,i)=>b.classList.toggle('on',i===idx));
-  // sync card
-  cardG[mStyle.id] = idx;
-  document.getElementById('ci-'+mStyle.id).src = mStyle.imgs[idx];
-  const sw = document.getElementById('ci-'+mStyle.id)
-    .closest('.card-img').querySelector('.gender-sw');
-  sw.querySelectorAll('.gsw-btn').forEach((b,i)=>b.classList.toggle('on',i===idx));
+  document.querySelectorAll('.mdot').forEach((b,i) => b.classList.toggle('on', i===idx));
+  setCardSlide(mStyle.id, idx);
   refreshModal();
 }
 
@@ -259,9 +271,20 @@ function refreshModal() {
   document.getElementById('mCounter').textContent = `${mGIdx+1} / ${mStyle.imgs.length}`;
 }
 
+// свайп в модалке
+let mTx = 0;
+document.getElementById('modal').addEventListener('touchstart', e => { mTx = e.touches[0].clientX; }, {passive:true});
+document.getElementById('modal').addEventListener('touchend', e => {
+  const diff = mTx - e.changedTouches[0].clientX;
+  if(Math.abs(diff) > 40 && mStyle) {
+    const next = diff > 0 ? Math.min(mGIdx+1, mStyle.imgs.length-1) : Math.max(mGIdx-1, 0);
+    if(next !== mGIdx) swMG(next);
+  }
+}, {passive:true});
+
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
-  document.body.style.overflow='';
+  document.body.style.overflow = '';
 }
 
 function doGenerate() {
@@ -276,7 +299,6 @@ function send(style, gIdx) {
     style_name: style.name,
     section: style.sec,
     gender: GKEYS[gIdx],
-    gender_label: GENDERS[gIdx],
   }));
 }
 
