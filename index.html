@@ -33,12 +33,14 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:4}
 .card-slides{position:absolute;inset:0;display:flex;transition:transform .28s cubic-bezier(.25,.46,.45,.94);will-change:transform}
 .card-slide{flex:0 0 100%;height:100%;display:flex;align-items:center;justify-content:center}
-.placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-bottom:28px}
 .placeholder-icon{font-size:38px}
-.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:1.5px;text-transform:uppercase}
-.card-zone{position:absolute;top:0;bottom:0;width:50%;z-index:3;display:flex;align-items:center;cursor:pointer}
-.card-zone-left{left:0;justify-content:flex-start;padding-left:6px}
-.card-zone-right{right:0;justify-content:flex-end;padding-right:6px}
+.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:1.5px;text-transform:uppercase;background:rgba(0,0,0,.35);padding:2px 8px;border-radius:6px}
+.card-zone{position:absolute;top:0;bottom:0;width:36px;z-index:3;display:flex;align-items:center;cursor:pointer}
+.card-zone-left{left:0;justify-content:flex-start;padding-left:5px}
+.card-zone-right{right:0;justify-content:flex-end;padding-right:5px}
+/* Центр карточки — кликабелен для открытия модалки */
+.card-center{position:absolute;top:0;bottom:0;left:36px;right:36px;z-index:3;cursor:pointer}
 .card-arrow{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,.0);pointer-events:none;transition:color .15s}
 .card-zone.show .card-arrow{color:rgba(255,255,255,.65)}
 .card-zone.show:active .card-arrow{color:#fff}
@@ -218,7 +220,10 @@ function makeCard(s) {
   zR.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); cardStep(id, 1); }; })(s.id));
   wrap.appendChild(zR);
 
-  wrap.addEventListener("click", (function(id) { return function() { openModal(id); }; })(s.id));
+  var zC = document.createElement("div");
+  zC.className = "card-center";
+  zC.addEventListener("click", (function(id) { return function() { openModal(id); }; })(s.id));
+  wrap.appendChild(zC);
 
   var bot = document.createElement("div"); bot.className = "card-bottom";
   var nameEl = document.createElement("div"); nameEl.className = "card-name"; nameEl.textContent = s.name;
