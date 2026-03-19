@@ -16,43 +16,50 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{background:var(--bg);color:var(--text);font-family:'Nunito',sans-serif;min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;background:radial-gradient(ellipse at 50% -10%,rgba(61,90,254,.15) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* HEADER */
 .header{position:sticky;top:0;z-index:100;background:rgba(8,9,15,.93);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:8px}
 .logo-icon{background:none;border:none;display:flex;align-items:center;justify-content:center}
 .logo-icon img{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 0 4px rgba(79,195,247,.5)) drop-shadow(0 0 7px rgba(123,82,212,.35))}
-.logo-text{font-size:20px;font-weight:800;letter-spacing:1px;background:linear-gradient(135deg,#4fc3f7,#a78bfa,#e0aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 4px rgba(79,195,247,.3)) drop-shadow(0 0 6px rgba(167,139,250,.25))}
+.logo-text{font-size:20px;font-weight:800;letter-spacing:1px;background:linear-gradient(135deg,#4fc3f7,#a78bfa,#e0aaff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .balance-pill{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;font-weight:700;color:var(--blue)}
+
+/* GENDER TABS */
+.tabs-wrap{position:sticky;top:65px;z-index:90;background:rgba(8,9,15,.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 16px 0}
+.tabs{display:flex;gap:6px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 4px 10px;border-radius:10px 10px 0 0;cursor:pointer;border:1px solid transparent;border-bottom:none;font-size:12px;font-weight:700;color:var(--muted);transition:color .2s,background .2s,border-color .2s;position:relative;bottom:-1px}
+.tab-icon{font-size:22px;line-height:1}
+.tab.active{color:var(--blue);background:var(--surface2);border-color:var(--border)}
+.tab.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:2px;background:var(--blue);border-radius:2px 2px 0 0}
+
+/* MAIN */
 .main{position:relative;z-index:1;padding:16px 0 100px}
-.section{margin-bottom:24px}
+.gender-panel{display:none}
+.gender-panel.active{display:block}
+.section{margin-bottom:28px}
 .section-title{font-size:20px;font-weight:800;padding:0 16px 10px;color:var(--text)}
 .cards-row{display:flex;gap:10px;padding:0 16px;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .cards-row::-webkit-scrollbar{display:none}
-.card{flex:0 0 152px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;animation:fadeUp .4s ease both}
+
+/* CARD */
+.card{flex:0 0 152px;scroll-snap-align:start;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);overflow:hidden;position:relative;cursor:pointer;transition:border-color .2s,transform .15s;animation:fadeUp .4s ease both}
+.card:active{transform:scale(0.97)}
+.card:hover{border-color:rgba(79,195,247,.35)}
 .card-img{position:relative;width:100%;padding-top:125%;overflow:hidden;background:var(--surface2)}
 .card-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:52%;background:linear-gradient(to top,var(--surface) 0%,transparent 100%);pointer-events:none;z-index:2}
 .badge{position:absolute;top:8px;left:8px;background:var(--badge);color:#fff;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 7px;border-radius:5px;text-transform:uppercase;z-index:4}
-.card-slides{position:absolute;inset:0;display:flex;overflow:hidden;transition:transform .28s cubic-bezier(.25,.46,.45,.94);will-change:transform}
-.card-slide{flex:0 0 100%;height:100%;flex-shrink:0;position:relative}
-.placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-bottom:20px}
-.placeholder-icon{font-size:38px}
-.placeholder-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.9);letter-spacing:1.5px;text-transform:uppercase;background:rgba(0,0,0,.55);padding:3px 9px;border-radius:6px}
-.card-zone{position:absolute;top:0;bottom:0;width:36px;z-index:3;display:flex;align-items:center;cursor:pointer}
-.card-zone-left{left:0;justify-content:flex-start;padding-left:5px}
-.card-zone-right{right:0;justify-content:flex-end;padding-right:5px}
-/* Центр карточки — кликабелен для открытия модалки */
-.card-center{position:absolute;top:0;bottom:0;left:36px;right:36px;z-index:3;cursor:pointer}
-.card-arrow{width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,.0);pointer-events:none;transition:color .15s}
-.card-zone.show .card-arrow{color:rgba(255,255,255,.65)}
-.card-zone.show:active .card-arrow{color:#fff}
-.card-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:4;pointer-events:none}
-.cdot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.35);transition:background .2s,transform .2s}
-.cdot.on{background:#fff;transform:scale(1.3)}
+.placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding-bottom:20px}
+.placeholder-icon{font-size:42px}
+.placeholder-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:1.5px;text-transform:uppercase;background:rgba(0,0,0,.5);padding:3px 8px;border-radius:6px}
 .card-bottom{padding:8px 10px 10px}
 .card-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .btn-sm{width:100%;padding:7px 0;border:none;border-radius:8px;background:var(--btn-sm);color:#fff;font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;letter-spacing:.3px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s;box-shadow:0 2px 10px rgba(61,90,254,.35)}
 .btn-sm:active{transform:scale(0.97)}
 .btn-sm::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.14),transparent);animation:shimmer 2.5s infinite}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:200;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s}
 .modal-bg.open{opacity:1;pointer-events:all}
 .modal-sheet{position:relative;flex:1;display:flex;flex-direction:column;transform:translateY(40px);transition:transform .3s cubic-bezier(.34,1.4,.64,1)}
 .modal-bg.open .modal-sheet{transform:translateY(0)}
@@ -61,42 +68,59 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
 .modal-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
 .modal-ph-icon{font-size:80px}
 .modal-ph-label{font-size:13px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase}
-.modal-counter{position:absolute;top:14px;left:14px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:14px;z-index:5}
 .modal-close{position:absolute;top:12px;right:12px;width:52px;height:52px;border-radius:50%;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.2);color:#fff;font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:background .18s}
 .modal-close:active{background:rgba(255,255,255,.2)}
-.modal-dots{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:9px;z-index:5}
-.mdot{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.3);transition:background .2s,transform .2s;cursor:pointer}
-.mdot.on{background:#fff;transform:scale(1.25)}
 .modal-foot{background:var(--bg);padding:14px 16px 28px;border-top:1px solid var(--border)}
 .modal-style-name{font-size:22px;font-weight:800;margin-bottom:4px}
-.modal-gender-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:12px}
+.modal-gender-row{display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.modal-gender-label{font-size:13px;font-weight:600;color:var(--muted)}
 .btn-generate{width:100%;padding:15px;border:none;border-radius:13px;background:var(--btn);color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;letter-spacing:.5px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 4px 20px rgba(61,90,254,.4);transition:transform .15s}
 .btn-generate:active{transform:scale(0.98)}
 .btn-generate::after{content:'';position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);animation:shimmer 3s infinite}
 .btn-generate span{position:relative;z-index:1}
+
+/* BOTTOM NAV */
 .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:150;background:rgba(8,9,15,.95);backdrop-filter:blur(16px);border-top:1px solid var(--border);padding:8px 0 calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:space-around}
 .nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:4px 14px;border-radius:10px}
 .nav-btn.active .nav-ico,.nav-btn.active .nav-lbl{color:var(--blue)}
 .nav-ico{font-size:19px;color:var(--muted);transition:color .2s}
 .nav-lbl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.3px;transition:color .2s}
+
 @keyframes shimmer{0%{left:-80%}100%{left:160%}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
 <body>
+
 <div class="header">
   <div class="logo">
-    <div class="logo-icon"><img src="logo.png" alt="logo"></div>
+    <div class="logo-icon"><img src="logo.png" alt="logo" onerror="this.style.display='none'"></div>
     <div class="logo-text">aibaba</div>
   </div>
   <div class="balance-pill" id="balancePill">3 фото</div>
 </div>
-<div class="main" id="main"></div>
-<div class="bottom-nav">
-  <div class="nav-btn active"><div class="nav-ico">✦</div><div class="nav-lbl">Стили</div></div>
-  <div class="nav-btn"><div class="nav-ico">🖼</div><div class="nav-lbl">Мои фото</div></div>
-  <div class="nav-btn"><div class="nav-ico">⬡</div><div class="nav-lbl">Баланс</div></div>
+
+<!-- GENDER TABS -->
+<div class="tabs-wrap">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('female')" id="tab-female">
+      <div class="tab-icon">👩</div>
+      <div>Девушки</div>
+    </div>
+    <div class="tab" onclick="switchTab('male')" id="tab-male">
+      <div class="tab-icon">👨</div>
+      <div>Мужчины</div>
+    </div>
+    <div class="tab" onclick="switchTab('couple')" id="tab-couple">
+      <div class="tab-icon">👫</div>
+      <div>Пары</div>
+    </div>
+  </div>
 </div>
+
+<div class="main" id="main"></div>
+
+<!-- MODAL -->
 <div class="modal-bg" id="modal">
   <div class="modal-sheet">
     <div class="modal-img-wrap" id="mImgWrap">
@@ -104,34 +128,39 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;height:250px;backgro
         <div class="modal-ph-icon" id="mPhIcon"></div>
         <div class="modal-ph-label" id="mPhLabel"></div>
       </div>
-      <div class="modal-counter" id="mCounter">1 / 3</div>
       <button class="modal-close" onclick="closeModal()">&#10005;</button>
-      <div class="modal-dots" id="mDots"></div>
     </div>
     <div class="modal-foot">
       <div class="modal-style-name" id="mName"></div>
-      <div class="modal-gender-label" id="mGender"></div>
+      <div class="modal-gender-row">
+        <div class="modal-gender-label" id="mGender"></div>
+      </div>
       <button class="btn-generate" onclick="doGenerate()">
         <span>✦ Сгенерировать (1 фото)</span>
       </button>
     </div>
   </div>
 </div>
+
+<div class="bottom-nav">
+  <div class="nav-btn active"><div class="nav-ico">✦</div><div class="nav-lbl">Стили</div></div>
+  <div class="nav-btn"><div class="nav-ico">🖼</div><div class="nav-lbl">Мои фото</div></div>
+  <div class="nav-btn"><div class="nav-ico">⬡</div><div class="nav-lbl">Баланс</div></div>
+</div>
+
 <script>
 var tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
 if (tg) { tg.expand(); tg.enableClosingConfirmation(); }
 
-var GKEYS   = ["male", "female", "couple"];
-var GLABELS = ["Мужской", "Женский", "Пара"];
-var GICONS  = ["👨", "👩", "👫"];
-var MAX_G   = 2;
+var GENDER_LABELS = { female: "👩 Девушки", male: "👨 Мужчины", couple: "👫 Пары" };
+var GENDER_KEYS   = ["female", "male", "couple"];
 
 var SEC_THEME = {
-  "Бизнес":    { grad: "linear-gradient(160deg,#0f2027,#203a43,#2c5364)", icon: "💼" },
-  "Люкс":      { grad: "linear-gradient(160deg,#1a0533,#3d1c6e,#6a3fa6)", icon: "👑" },
-  "Street":    { grad: "linear-gradient(160deg,#0f0c29,#302b63,#24243e)", icon: "🎨" },
-  "Природа":   { grad: "linear-gradient(160deg,#134e5e,#1a6b3a,#2d8653)", icon: "🌿" },
-  "Праздники": { grad: "linear-gradient(160deg,#2c1654,#8b1a6b,#c0392b)", icon: "🎉" }
+  "Бизнес":    { grad:"linear-gradient(160deg,#0f2027,#203a43,#2c5364)", icon:"💼" },
+  "Люкс":      { grad:"linear-gradient(160deg,#1a0533,#3d1c6e,#6a3fa6)", icon:"👑" },
+  "Street":    { grad:"linear-gradient(160deg,#0f0c29,#302b63,#24243e)", icon:"🎨" },
+  "Природа":   { grad:"linear-gradient(160deg,#134e5e,#1a6b3a,#2d8653)", icon:"🌿" },
+  "Праздники": { grad:"linear-gradient(160deg,#2c1654,#8b1a6b,#c0392b)", icon:"🎉" }
 };
 
 var STYLES = [
@@ -148,153 +177,88 @@ var STYLES = [
   { id:"hol_bday",   sec:"Праздники", name:"День рождения",   badge:false }
 ];
 
-var cardG = {};
-STYLES.forEach(function(s) { cardG[s.id] = 0; });
-var mStyle = null, mGIdx = 0;
+var currentGender = "female";
+var mStyle = null;
+
+function switchTab(gender) {
+  currentGender = gender;
+  GENDER_KEYS.forEach(function(g) {
+    document.getElementById("tab-" + g).classList.toggle("active", g === gender);
+    var panel = document.getElementById("panel-" + g);
+    if (panel) panel.classList.toggle("active", g === gender);
+  });
+}
 
 function getTheme(sec) {
   return SEC_THEME[sec] || { grad:"linear-gradient(160deg,#1a1a2e,#16213e,#0f3460)", icon:"✦" };
 }
 
-function build() {
-  var secs = {};
-  STYLES.forEach(function(s) { if (!secs[s.sec]) secs[s.sec] = []; secs[s.sec].push(s); });
+function buildAll() {
   var main = document.getElementById("main");
-  Object.keys(secs).forEach(function(title) {
-    var sec = document.createElement("div"); sec.className = "section";
-    var th  = document.createElement("div"); th.className  = "section-title"; th.textContent = title;
-    var row = document.createElement("div"); row.className = "cards-row";
-    secs[title].forEach(function(s) { row.appendChild(makeCard(s)); });
-    sec.appendChild(th); sec.appendChild(row);
-    main.appendChild(sec);
+  GENDER_KEYS.forEach(function(gender) {
+    var panel = document.createElement("div");
+    panel.className = "gender-panel" + (gender === "female" ? " active" : "");
+    panel.id = "panel-" + gender;
+
+    var secs = {};
+    STYLES.forEach(function(s) { if (!secs[s.sec]) secs[s.sec] = []; secs[s.sec].push(s); });
+
+    Object.keys(secs).forEach(function(title) {
+      var sec = document.createElement("div"); sec.className = "section";
+      var th  = document.createElement("div"); th.className = "section-title"; th.textContent = title;
+      var row = document.createElement("div"); row.className = "cards-row";
+      secs[title].forEach(function(s) { row.appendChild(makeCard(s, gender)); });
+      sec.appendChild(th); sec.appendChild(row);
+      panel.appendChild(sec);
+    });
+
+    main.appendChild(panel);
   });
 }
 
-function makeCard(s) {
+function makeCard(s, gender) {
   var theme = getTheme(s.sec);
   var d = document.createElement("div"); d.className = "card";
+  d.addEventListener("click", function() { openModal(s, gender); });
 
-  var wrap = document.createElement("div");
-  wrap.className = "card-img"; wrap.id = "cimg-" + s.id;
+  var wrap = document.createElement("div"); wrap.className = "card-img";
+  wrap.style.background = theme.grad;
 
   if (s.badge) {
     var bEl = document.createElement("span"); bEl.className = "badge"; bEl.textContent = "НОВОЕ";
     wrap.appendChild(bEl);
   }
 
-  var slides = document.createElement("div");
-  slides.className = "card-slides"; slides.id = "cs-" + s.id;
-  GLABELS.forEach(function(gl) {
-    var slide = document.createElement("div"); slide.className = "card-slide";
-    slide.style.background = theme.grad;
-    var ph = document.createElement("div"); ph.className = "placeholder";
-    ph.innerHTML = "<div class=\"placeholder-icon\">" + theme.icon + "</div><div class=\"placeholder-label\">" + gl + "</div>";
-    slide.appendChild(ph); slides.appendChild(slide);
-  });
-  wrap.appendChild(slides);
-
-  var dotsEl = document.createElement("div"); dotsEl.className = "card-dots"; dotsEl.id = "cd-" + s.id;
-  GLABELS.forEach(function(_, i) {
-    var dot = document.createElement("div"); dot.className = "cdot" + (i === 0 ? " on" : "");
-    dotsEl.appendChild(dot);
-  });
-  wrap.appendChild(dotsEl);
-
-  var zL = document.createElement("div");
-  zL.className = "card-zone card-zone-left"; zL.id = "czl-" + s.id;
-  zL.innerHTML = "<div class=\"card-arrow\">&#8249;</div>";
-  zL.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); cardStep(id, -1); }; })(s.id));
-  wrap.appendChild(zL);
-
-  var zR = document.createElement("div");
-  zR.className = "card-zone card-zone-right show"; zR.id = "czr-" + s.id;
-  zR.innerHTML = "<div class=\"card-arrow\">&#8250;</div>";
-  zR.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); cardStep(id, 1); }; })(s.id));
-  wrap.appendChild(zR);
-
-  var zC = document.createElement("div");
-  zC.className = "card-center";
-  zC.addEventListener("click", (function(id) { return function() { openModal(id); }; })(s.id));
-  wrap.appendChild(zC);
+  var ph = document.createElement("div"); ph.className = "placeholder";
+  ph.innerHTML = "<div class=\"placeholder-icon\">" + theme.icon + "</div>";
+  wrap.appendChild(ph);
 
   var bot = document.createElement("div"); bot.className = "card-bottom";
   var nameEl = document.createElement("div"); nameEl.className = "card-name"; nameEl.textContent = s.name;
   var btn = document.createElement("button"); btn.className = "btn-sm"; btn.textContent = "✦ Создать";
-  btn.addEventListener("click", (function(id) { return function(e) { e.stopPropagation(); quickGen(id); }; })(s.id));
+  btn.addEventListener("click", function(e) { e.stopPropagation(); quickGen(s, gender); });
   bot.appendChild(nameEl); bot.appendChild(btn);
 
   d.appendChild(wrap); d.appendChild(bot);
   return d;
 }
 
-function cardStep(id, dir) {
-  var cur  = cardG[id];
-  var next = cur + dir;
-  if (next < 0 || next > MAX_G) return;
-  setCardSlide(id, next);
+function quickGen(style, gender) {
+  doSend(style, gender);
 }
 
-function setCardSlide(id, idx) {
-  cardG[id] = idx;
-  var sl  = document.getElementById("cs-"  + id);
-  var dt  = document.getElementById("cd-"  + id);
-  var czl = document.getElementById("czl-" + id);
-  var czr = document.getElementById("czr-" + id);
-  if (sl) sl.style.transform = "translateX(-" + (idx * 100) + "%)";
-  if (dt) dt.querySelectorAll(".cdot").forEach(function(d, i) { d.classList.toggle("on", i === idx); });
-  if (czl) czl.classList.toggle("show", idx > 0);
-  if (czr) czr.classList.toggle("show", idx < MAX_G);
-}
-
-function quickGen(id) {
-  var s = STYLES.find(function(x) { return x.id === id; });
-  doSend(s, cardG[id]);
-}
-
-function openModal(id) {
-  mStyle = STYLES.find(function(x) { return x.id === id; });
-  mGIdx  = cardG[id];
-  document.getElementById("mName").textContent = mStyle.name;
-  refreshModal();
+function openModal(style, gender) {
+  mStyle = style;
+  var theme = getTheme(style.sec);
+  document.getElementById("mImgWrap").style.background = theme.grad;
+  document.getElementById("mPhIcon").textContent  = theme.icon;
+  document.getElementById("mPhLabel").textContent = style.sec;
+  document.getElementById("mName").textContent    = style.name;
+  document.getElementById("mGender").textContent  = GENDER_LABELS[gender || currentGender];
+  document.getElementById("modal").dataset.gender = gender || currentGender;
   document.getElementById("modal").classList.add("open");
   document.body.style.overflow = "hidden";
 }
-
-function modalStep(dir) {
-  var next = mGIdx + dir;
-  if (next < 0 || next > MAX_G) return;
-  mGIdx = next;
-  setCardSlide(mStyle.id, mGIdx);
-  refreshModal();
-}
-
-function refreshModal() {
-  var theme = getTheme(mStyle.sec);
-  document.getElementById("mImgWrap").style.background = theme.grad;
-  document.getElementById("mPhIcon").textContent  = theme.icon;
-  document.getElementById("mPhLabel").textContent = GLABELS[mGIdx];
-  document.getElementById("mGender").textContent  = GICONS[mGIdx] + "  " + GLABELS[mGIdx];
-  document.getElementById("mCounter").textContent = (mGIdx + 1) + " / " + (MAX_G + 1);
-  var cont = document.getElementById("mDots"); cont.innerHTML = "";
-  GLABELS.forEach(function(_, i) {
-    var dot = document.createElement("div"); dot.className = "mdot" + (i === mGIdx ? " on" : "");
-    dot.addEventListener("click", (function(ii) { return function() { mGIdx = ii; setCardSlide(mStyle.id, ii); refreshModal(); }; })(i));
-    cont.appendChild(dot);
-  });
-}
-
-// Свайп в модалке — вся область картинки
-var mWrap = document.getElementById("mImgWrap");
-var mSwipeX = 0;
-mWrap.addEventListener("touchstart", function(e) {
-  mSwipeX = e.touches[0].clientX;
-}, {passive: true});
-mWrap.addEventListener("touchend", function(e) {
-  var diff = mSwipeX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 40 && mStyle) {
-    modalStep(diff > 0 ? 1 : -1);
-  }
-}, {passive: true});
 
 function closeModal() {
   document.getElementById("modal").classList.remove("open");
@@ -303,16 +267,18 @@ function closeModal() {
 
 function doGenerate() {
   if (!mStyle) return;
-  doSend(mStyle, mGIdx);
+  var gender = document.getElementById("modal").dataset.gender || currentGender;
+  doSend(mStyle, gender);
   closeModal();
 }
 
-function doSend(style, gIdx) {
-  var data = JSON.stringify({ style_id: style.id, style_name: style.name, section: style.sec, gender: GKEYS[gIdx] });
+function doSend(style, gender) {
+  var data = JSON.stringify({ style_id: style.id, style_name: style.name, section: style.sec, gender: gender });
   if (tg && tg.sendData) { tg.sendData(data); }
+  else { alert("Отправка: " + data); }
 }
 
-build();
+buildAll();
 </script>
 </body>
 </html>
